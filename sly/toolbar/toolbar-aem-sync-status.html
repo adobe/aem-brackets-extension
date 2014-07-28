@@ -1,0 +1,33 @@
+{{!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) 2014 Adobe Systems Incorporated. All rights reserved.
+  ~
+  ~ Licensed under the Apache License 2.0.
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--}}
+<div class="sly modal">
+    <div class="modal-header">
+        <h1 class="dialog-title">{{Strings.SYNC_STATUS}}</h1>
+    </div>
+    <div class="modal-body">
+        {{#displaySyncStatus}}
+        <table>
+            <tr class="tablehead">
+                <td>{{Strings.SYNC_STATUS_TH_FILE}}</td>
+                <td>{{Strings.SYNC_STATUS_TH_STATUS}}</td>
+            </tr>
+            {{#syncStatus}}
+            <tr>
+                <td class="leftcolumn">{{path}}</td>
+                <td class="rightcolumn">{{status}}</td>
+            </tr>
+            {{/syncStatus}}
+        </table>
+        {{/displaySyncStatus}}
+        {{#errorMessage}}
+        <div>{{errorMessage}}</div>
+        {{/errorMessage}}
+    </div>
+    <div class="modal-footer">
+        <button class="dialog-button btn primary" data-button-id="ok">{{Strings.BUTTON_OK}}</button>
+    </div>
+</div>

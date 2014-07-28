@@ -1,0 +1,51 @@
+{
+    "preferences":{
+        "syncedLanguages": ["html", "css", "javascript", "xml"]
+    },
+    "constants":{
+        "SHORTCUT": "sly",
+        "PREFIX": "data-sly-",
+        "BEAN_DECL": "data-sly-use",
+        "LIST": {
+            "DECL": "data-sly-list",
+            "CLASS": {"members": [{"name":"index"}, {"name":"count"}, {"name":"first"}, {"name":"middle"}, {"name":"last"}, {"name":"odd"}, {"name":"even"}]}, 
+            "DEFAULT_NAME" : "item"
+        },
+        "EXPR_START": "${",
+        "EXPR_END": "}",
+        "EXPR_REGEX": "\\$\\{.*\\}",
+        "VALUE_REGEX": "'.*'|\".*\"|true|false|[0-9]+",        
+        "OPERATOR_REGEX":"&&|@|<|>|<=|>=|\\?|:|\\|\\||\\!",
+        "ATTRIBUTE_NAME_REGEX":"data-sly-[a-zA-Z\\._]+",        
+        "COMPLETION" : {
+            "EXPR":"\"${|}\"",
+            "STATIC":"\"|\""
+        },
+        "LOCAL_BEAN_JS": {
+            "REGEX": ".*\\.js$",
+            "RETURN_OBJECT_REGEXP": "return[ \\s\\n]*\\{"
+        },
+        "LOCAL_BEAN_JAVA": {
+            "REGEX":".*\\.java$"
+        },
+        "COMPLETION_CURSOR_POS": "|",
+        "TOKEN_START": "{ '\"&|![",
+        "MEMBER_START": ".",
+        "DECL_START": ".",        
+        "EXTENSIONS": ["html", "sly"]
+    },
+    "attributes":
+    {
+        "data-sly-attribute":       { "type":"EXPR"},
+        "data-sly-call":            { "type":"EXPR", "mandatory":true},
+        "data-sly-element":         { "type":"EXPR", "mandatory":true},
+        "data-sly-include":         { "type":"EXPR", "mandatory":true},    
+        "data-sly-list":            { "type":"EXPR"},
+        "data-sly-resource":        { "type":"EXPR", "mandatory":true},
+        "data-sly-test":            { "type":"EXPR"},
+        "data-sly-text":            { "type":"EXPR", "mandatory":true},
+        "data-sly-template":        { "type":"EXPR", "mandatory":true, "identifier":true},
+        "data-sly-use":             { "type":"STATIC", "mandatory":true, "identifier":true},
+        "data-sly-unwrap":          { "type":"NONE"}
+    }
+}

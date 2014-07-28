@@ -1,0 +1,30 @@
+{
+    "name"           : "aem-sightly-brackets-extension",
+    "title"          : "AEM Sightly Brackets Extension",
+    "description"    : "Sightly is the new HTML templating system introduced with Adobe Experience Manager 6.0. The AEM Sightly Brackets Extension provides a smoother development workflow for writing AEM components, adding support for syntax-highlighting, code-completion, bi-directional synchronisation and more.",
+    "version"        : "0.0.3",
+    "engines"        : {
+        "brackets": ">=0.38.0"
+    },
+    "author" : "Adobe Marketing Cloud (https://github.com/raducotescu)",
+    "homepage" : "https://github.com/adobe-marketing-cloud/aem-sightly-brackets-extension",
+    "repository" : "https://github.com/adobe-marketing-cloud/aem-sightly-brackets-extension.git",
+    "license" : "MIT License",
+    "keywords" : ["aem", "sightly", "templating"],
+    "categories": ["editing", "language", "external"],
+    "dependencies"   : {
+        "request" : "~2.34.0",
+        "adm-zip" : "0.4.4",
+        "q"       : "1.0.1",
+        "glob"    : "3.2.9",
+        "fs-extra": "0.8.1",
+        "xmldom"  : "0.1.19",
+        "xpath"   : "0.0.7"
+    },
+    "devDependencies": {
+        "grunt"                 : "~0.4.2",
+        "grunt-maven-tasks"     : "~1.1.0",
+        "grunt-npm-install"     : "~0.1.0",
+        "grunt-contrib-compress": "~0.8.0"
+    }
+}

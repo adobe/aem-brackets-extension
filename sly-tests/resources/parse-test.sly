@@ -1,0 +1,8 @@
+<!-- this file contains exactly 2 beans, 4 sly blocks, 6 expressions, 4 sly values, and 3 operators -->
+<div class="before" data-sly-use.myBean="com.my.bean.Bean" class="after">
+	<span data-sly-test="${properties.phBeforeText @ context='html'}">${properties.phBeforeText || false}</span>
+    <ul data-sly-list.myList="${resource.listChildren}">
+        <li>${myList.index}</li>    
+    </ul>
+    <div data-sly-test.check="${!true}">${3}</div>
+</div>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <!-- sly should show some hints -->
+        <p sly >
+            blah
+        </p>
+        
+        <!-- data-sly- should show some hints, this is placeholder for all hint inserts as well -->
+        <div data-sly- >
+            blah
+        </div>
+        
+        <!-- typing '=' should directly complete with expression ="${|}"-->
+        <div data-sly-template >
+            blah
+        </div>
+        
+        <!-- some beans should be proposed -->
+        <div>
+            ${currentPage.listChildren}
+        </div>
+        
+        <!-- some member should be proposed -->
+        <div>
+            ${resource.}
+        </div>
+        
+        <!-- nothing should be proposed -->
+        <div>
+            ${resource.name}
+        </div>
+
+    </body>
+</html>

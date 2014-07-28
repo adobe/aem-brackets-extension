@@ -1,0 +1,20 @@
+{
+    "attributes":
+    {
+    },
+    "beanClasses":
+    {
+        "org.apache.sling.api.resource.ValueMap"    :   {"hidden": true, "members": [{"name":"jcr:title"},{"name":"jcr:description"}]},
+        "org.apache.sling.api.resource.Resource":         {"hidden": true, "members": [{"name":"listChildren"},{"name":"name"},{"name":"parent"},{"name":"path"},{"name":"resourceType"},{"name":"resourceSuperType"}]}
+    },
+    "beans": {
+        "properties": {
+            "name": "properties",
+            "clazz": "org.apache.sling.api.resource.ValueMap"
+        },
+        "resource": {
+            "name": "resource",
+            "clazz": "org.apache.sling.api.resource.Resource"
+        }
+    }
+}

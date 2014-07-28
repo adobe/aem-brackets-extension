@@ -1,0 +1,21 @@
+{
+    "nonew"   : true,
+    "curly"   : true,
+    "latedef" : true,
+    "unused"  : "vars",
+    "noarg"   : true,
+    "indent"  : 4,
+    "trailing": true,
+    "forin"   : true,
+    "noempty" : true,
+    "quotmark": "single",
+    "node"    : true,
+    "eqeqeq"  : true,
+    "strict"  : true,
+    "undef"   : true,
+    "bitwise" : true,
+    "immed"   : true,
+    "maxlen"  : 140,
+    "freeze"  : true,
+    "multistr": true
+}

@@ -1,0 +1,48 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Adobe Systems Incorporated. All rights reserved.
+ *
+ * Licensed under the Apache License 2.0.
+ * http://www.apache.org/licenses/LICENSE-2.0
+ ******************************************************************************/
+.sly table {
+    width: 100%;
+}
+
+.sly .tablehead, .sly .settings-parameter {
+    font-weight: 500;
+}
+
+.disabled-toolbar-button {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+}
+
+.sly .alert {
+    color: #DD3E3A;
+    font-weight: 500;
+}
+
+#sly-status-aem {
+    background-image: url('../toolbar/brackets_sightly_icons.svg');
+}
+
+#sly-status-aem.sly-status-inactive {
+    background-position: 0px 0px !important;
+}
+
+#sly-status-aem.sly-status-ok {
+    background-position: 0 -24px !important;
+}
+
+#sly-status-aem.sly-status-warning {
+    background-position: 0px -48px !important;
+}
+
+#sly-status-aem.sly-status-error {
+    background-position: 0px -72px !important;
+}
+
+#sly-status-aem.sly-status-active {
+    background-position: 0px -96px !important;
+}

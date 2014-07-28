@@ -1,0 +1,44 @@
+{{!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright (c) 2014 Adobe Systems Incorporated. All rights reserved.
+  ~
+  ~ Licensed under the Apache License 2.0.
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--}}
+<div class="sly modal">
+    <div class="modal-header">
+        <h1 class="dialog-title">{{Strings.PROJECT_SETTINGS}}</h1>
+    </div>
+    <div class="modal-body">
+        <div class="field-container">
+            <form class="form-horizontal">
+                <fieldset>
+                    <legend>{{Strings.PROJECT_SYNCHRONISATION_SETTINGS}}</legend>
+                    <table>
+                        <tr>
+                            <td class="settings-parameter">{{Strings.PROJECT_SETTING_SERVER_URL}}:</td>
+                            <td><input type="text" placeholder="{{Strings.PROJECT_SETTING_SERVER_URL_HINT}}" value="{{serverUrl}}"
+                                       name="serverUrl" id="serverUrl"/></td>
+                        </tr>
+                        <tr>
+                            <td class="settings-parameter">{{Strings.PROJECT_SETTING_REMOTE_USER}}:</td>
+                            <td><input type="text" placeholder="{{Strings.PROJECT_SETTING_REMOTE_USER_HINT}}" value="{{remoteUser}}"
+                                       class="text" name="remoteUser" id="remoteUser"/></td>
+                        </tr>
+                        <tr>
+                            <td class="settings-parameter">{{Strings.PROJECT_SETTING_REMOTE_USER_PASSWORD}}:</td>
+                            <td><input type="password" value="{{remoteUserPassword}}" class="password" name="remoteUserPassword"
+                                       id="remoteUserPassword"/></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </form>
+            {{#errorMessage}}
+            <div class="alert">{{{errorMessage}}}</div>
+            {{/errorMessage}}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="dialog-button btn" data-button-id="cancel">{{Strings.BUTTON_CANCEL}}</button>
+        <button class="dialog-button btn primary" data-button-id="ok">{{Strings.BUTTON_OK}}</button>
+    </div>
+</div>
