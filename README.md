@@ -44,5 +44,5 @@ more.
   Mac, `Ctrl-Shift-E` on a PC; `Import Content Package` - `⌘-Shift-I` on a Mac, `Ctrl-Shit-I` on a PC)
 
 ## Credits
-* [Nicolas Peltier](https://github.com/nicolasATadobe): Initial plug-in with Sightly syntax support (syntax highlighting and auto-completion for expressions and statements), and synchronization to AEM (automatic and manual import and export).
-* [Radu Cotescu](raducotescu): Added project preferences, improved synchronization to use the Package Manager HTTP Service API, added support for `filter.xml` rules, enhanced UI with sync notifications.
+* [Nicolas Peltier](https://github.com/nicolasATadobe): Initial plug-in with Sightly support (syntax highlighting and auto-completion for expressions and statements), and synchronization to AEM (automatic and manual import and export).
+* [Radu Cotescu](https://github.com/raducotescu): Added project preferences, improved synchronization to use the Package Manager HTTP Service API, added support for `filter.xml` rules, enhanced UI with sync notifications.
