@@ -43,3 +43,6 @@ more.
   * in the top-level `Sightly` menu two entries allow synchronising the full content package (`Export Content Package` - `⌘-Shift-E` on a
   Mac, `Ctrl-Shift-E` on a PC; `Import Content Package` - `⌘-Shift-I` on a Mac, `Ctrl-Shit-I` on a PC)
 
+## Credits
+* [Nicolas Peltier](https://github.com/nicolasATadobe): Initial plug-in with Sightly syntax support, and synchronization to AEM.
+* [Radu Cotescu](raducotescu): Added project preferences, improved synchronization to use the Package Manager HTTP Service API, added support for `filter.xml` rules, enhanced UI with sync notifications.
