@@ -300,22 +300,17 @@
             for (var root in filterSyncStatusFilters) {
                 if (filterSyncStatusFilters.hasOwnProperty(root)) {
                     f = filterSyncStatusFilters[root];
-                    if (f.rules.length > 0) {
+                    if (remotePath !== '/' && remotePath.indexOf(root) === 0 && remotePath.length > root.length) {
+                        // we're syncing something which is below a filter
+                        filterString += '<filter root="' + remotePath + '"/>';
+                    } else {
+                        // we're either syncing a full content package (remotePath is /) or something that matches a filter exactly
                         filterString += '<filter root="' + root + '">';
                         for (ri = 0; ri < f.rules.length; ri++) {
                             rule = f.rules[ri];
                             filterString += '<' + rule.type + ' pattern="' + rule.pattern.source + '"/>';
                         }
                         filterString += '</filter>';
-                    } else {
-                        if (remotePath !== '/' && remotePath.indexOf(root) === 0 && remotePath.length > root.length) {
-                            // we're syncing something which is below a filter
-                            filterString += '<filter root="' + remotePath + '"/>';
-                        } else {
-                            // we're either syncing a full content package (remotePath is /) or something that matches a filter exactly
-                            filterString += '<filter root="' + root + '"/>';
-                        }
-
                     }
                 }
             }
