@@ -7,7 +7,7 @@
 * bidirectional synchronisation.
 
 ## Requirements
-AEM Sightly Brackets Extension supports Brackets version greater or equal than sprint 38. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
+AEM Sightly Brackets Extension supports Brackets versions greater or equal than sprint 38. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
 
 ## How to Install the AEM Sightly Brackets Extension
 1. Open Brackets. In menu **File**, select **Extension Manager…**
