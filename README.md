@@ -56,8 +56,6 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
     ----
     
-    
-
 2. **On-demand bidirectional synchronisation**
     1. through the Project Explorer contextual menu entries - **Export to Server** or **Import from Server** - if the selected entry belongs to the `jcr_root` folder
     
@@ -76,7 +74,7 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
         * **Export Content Package** - `⌘-Shift-E` on a Mac, `Ctrl-Shift-E` on a PC
         * **Import Content Package** - `⌘-Shift-I` on a Mac, `Ctrl-Shift-I` on a PC
 
-        ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/export_content_package.png)
+      ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/export_content_package.png)
 
 The AEM Sightly Brackets Extension adds a notification icon on the main toolbar, in the bottom right corner of the Brackets window. After a synchronisation operation is performed the notification icon's colour changes to indicate the synchronisation status:
 
