@@ -1,4 +1,5 @@
 # AEM Sightly Brackets Extension
+![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/brackets_sightly_ext_sightly.png)
 
 [Sightly](http://docs.adobe.com/content/docs/en/aem/6-0/develop/sightly.html "Sightly") is the new HTML templating system introduced with Adobe Experience Manager 6.0. The AEM Sightly Brackets Extension provides a smoother development workflow for writing AEM components, offering several features like:
 
