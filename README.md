@@ -43,18 +43,16 @@ The settings will be saved in your project's root folder, in the .`brackets.json
 The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
 1. **Automated synchronisation for HTML, JavaScript, CSS and .content.xml files**; provided that the remote path of the files you are editing is allowed to be synchronised by the filtering rules defined in `filter.xml`, these files will be synced to the AEM server on-save; for `.content.xml` files their parent folders will be synchronised.
-
+    
     ----
     **NOTE**
-
     Brackets has a list of predefined file extensions for the languages defined above:
-
     * **HTML**: html, htm, shtm, shtml, xhtml, cfm, cfml, cfc, dhtml, xht, tpl, twig, hbs, handlebars, kit, jsp, aspx, ascx, asp, master, cshtml, vbhtml
     * **JavaScript**: js, jsx, js.erb, jsm, _js
     * **CSS**: css, css.erb
     
     Therefore any documents matching Brackets' extension list for the above languages will get synchronised automatically on-save.
-    
+
     ----
     
 2. **On-demand bidirectional synchronisation**
@@ -64,7 +62,6 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
         ----
         **NOTE**
-
         If the selected entry is a folder only the folder's content that's marked as included by the filtering rules from `filter.xml` will be synchronised.
 
         If the selected entry is outside of the `jcr_root` folder the **Export to Server** and **Import from Server** contextual menu entries are disabled.
