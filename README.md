@@ -101,19 +101,23 @@ The AEM Sightly Brackets Extension is a Node.js module. The following steps need
 1. install [Node.js](http://nodejs.org/ "node.js") for your platform
 2. install [Apache Maven](http://maven.apache.org/ "Apache Maven") for your platform
 3. clone this repository
+    
     ```bash
     git clone git@github.com:Adobe-Marketing-Cloud/aem-sightly-brackets-extension.git
     ```
 4. clone the `aem-sightly-ide-api` repository
+    
     ```bash
     git clone git@github.com:Adobe-Marketing-Cloud/aem-sightly-ide-api.git
     ```
 5. use the Maven profile from [repo.adobe.com](http://repo.adobe.com/ "Adobe Public Maven Repository")
 5. in the `aem-sightly-ide-api` folder run
+    
     ```bash
     mvn clean install
     ```
 6. in the `aem-sightly-brackets-extension` folder run
+    
     ```bash
     npm install
     ./build.sh # Alternatively just run the commands from this script if you're not on a *nix platform
