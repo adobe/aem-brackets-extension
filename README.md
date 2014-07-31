@@ -96,6 +96,9 @@ The AEM Sightly Brackets extension also supports [.vltignore](http://docs.adobe.
 * `filter-vlt.xml` files are not yet taken into consideration.
 * When synchronising a full content package only the `filter.xml` file from the `META-INF/vault` folder is used as the extension builds ad-hoc content packages that get installed and removed from your AEM instance; therefore your content package's definition is not altered but its content is updated.
 
+## Sample Application
+A sample application built with Brackets and the AEM Sightly Brackets Extension is available at [https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc](https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc "Sightly TodoMVC Example").
+
 ## Development
 The AEM Sightly Brackets Extension is a Node.js module. The following steps need to be followed if you want to start hacking on new features:
 
