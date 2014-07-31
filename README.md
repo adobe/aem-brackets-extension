@@ -46,6 +46,7 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
     ----
     **NOTE**
+
     Brackets has a list of predefined file extensions for the languages defined above:
 
     * **HTML**: html, htm, shtm, shtml, xhtml, cfm, cfml, cfc, dhtml, xht, tpl, twig, hbs, handlebars, kit, jsp, aspx, ascx, asp, master, cshtml, vbhtml
@@ -53,7 +54,6 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
     * **CSS**: css, css.erb
     
     Therefore any documents matching Brackets' extension list for the above languages will get synchronised automatically on-save.
-
     ----
     
 2. **On-demand bidirectional synchronisation**
@@ -63,10 +63,10 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
         ----
         **NOTE**
+        
         If the selected entry is a folder only the folder's content that's marked as included by the filtering rules from `filter.xml` will be synchronised.
 
         If the selected entry is outside of the `jcr_root` folder the **Export to Server** and **Import from Server** contextual menu entries are disabled.
-
         ----
 
     2. full content-package synchronisation through the Sightly top-level menu, by selecting either:
