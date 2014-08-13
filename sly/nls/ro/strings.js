@@ -50,6 +50,7 @@ define({
     SYNC_STATUS_SYNCED                               : 'sincronizat',
     SYNC_STATUS_IGNORED                              : 'ignorat de către configurarea filtrului',
     SYNC_STATUS_EXCLUDED                             : 'exclus de către configurarea filtrului',
-    SYNC_STATUS_EXCLUDED_VLT                         : 'fișier vlt sau fișier exclus de către .vltignore'
+    SYNC_STATUS_EXCLUDED_VLT                         : 'fișier vlt sau fișier exclus de către .vltignore',
+    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'șters - fișierul a fost șters pe server'
 
 });

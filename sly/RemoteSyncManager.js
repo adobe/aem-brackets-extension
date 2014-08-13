@@ -194,6 +194,10 @@ define(function (require, exports, module) {
                     case -2:
                         status = Strings.SYNC_STATUS_EXCLUDED_VLT;
                         break;
+                    case -3:
+                        syncedFiles++;
+                        status = Strings.SYNC_STATUS_DELETED_FROM_REMOTE;
+                        break;
                 }
                 syncStatus.push({path: fileSyncStatus[i].path, status: status});
             }

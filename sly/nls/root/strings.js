@@ -50,6 +50,7 @@ define({
     SYNC_STATUS_SYNCED                               : 'synchronised',
     SYNC_STATUS_IGNORED                              : 'ignored by the filter configuration',
     SYNC_STATUS_EXCLUDED                             : 'excluded by the filter configuration',
-    SYNC_STATUS_EXCLUDED_VLT                         : 'vlt file or file excluded by .vltignore pattern'
+    SYNC_STATUS_EXCLUDED_VLT                         : 'vlt file or file excluded by .vltignore pattern',
+    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'removed - the file was deleted on the server'
 
 });

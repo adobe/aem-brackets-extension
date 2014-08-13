@@ -37,5 +37,12 @@
      */
     sync.EXCLUDED = -2;
 
+    /**
+     * Deleted from the receiving end.
+     *
+     * @type {number}
+     */
+    sync.DELETED_FROM_REMOTE = -3;
+
     module.exports.sync = sync;
 }());
