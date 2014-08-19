@@ -279,60 +279,25 @@
      * @param {String} packageGroup the package group
      * @param {String} packageName the package name
      * @param {String} packageVersion the package version
-     * @param {Object} [filterSyncStatus] an object containing the pre-sync status; the object's direct properties are remote file paths,
-     * storing objects like {filter: Filter, result: Number} or {result: Number}
      * @returns {promise|Q.promise} a promise resolved when the package's META-INF information has been persisted
      */
-    function createPackageMetaInf(tempWorkingDirectory, remotePath, filters, packageGroup, packageName, packageVersion, filterSyncStatus) {
-        var f, path, ri, rule;
+    function createPackageMetaInf(tempWorkingDirectory, remotePath, filters, packageGroup, packageName, packageVersion) {
+        var filter, ri, rule;
         var filterString = '<?xml version="1.0" encoding="UTF-8"?>\n\t<workspaceFilter version="1.0">\n';
-        if (filterSyncStatus) {
-            var filterSyncStatusFilters = {};
-            // we need to get the set of filters
-            for (path in filterSyncStatus) {
-                if (filterSyncStatus.hasOwnProperty(path)) {
-                    var entry = filterSyncStatus[path];
-                    if (entry.result && entry.filter instanceof Filter) {
-                        f = entry.filter;
-                        filterSyncStatusFilters[f.root] = f;
+        if (filters) {
+            for (var i = 0; i < filters.length; i++) {
+                filter = filters[i];
+                if (remotePath !== '/' && remotePath.indexOf(filter.root) === 0 && remotePath.length > filter.root.length) {
+                    // we're syncing something which is below a filter
+                    filterString += '<filter root="' + remotePath + '"/>';
+                } else {
+                    // we're either syncing a full content package (remotePath is /) or something that matches a filter exactly
+                    filterString += '<filter root="' + filter.root + '">';
+                    for (ri = 0; ri < filter.rules.length; ri++) {
+                        rule = filter.rules[ri];
+                        filterString += '<' + rule.type + ' pattern="' + rule.pattern.source + '"/>';
                     }
-                }
-            }
-            // for each filter we define the contents of the filter.xml file used for uploading the content package
-            for (var root in filterSyncStatusFilters) {
-                if (filterSyncStatusFilters.hasOwnProperty(root)) {
-                    f = filterSyncStatusFilters[root];
-                    if (remotePath !== '/' && remotePath.indexOf(root) === 0 && remotePath.length > root.length) {
-                        // we're syncing something which is below a filter
-                        filterString += '<filter root="' + remotePath + '"/>';
-                    } else {
-                        // we're either syncing a full content package (remotePath is /) or something that matches a filter exactly
-                        filterString += '<filter root="' + root + '">';
-                        for (ri = 0; ri < f.rules.length; ri++) {
-                            rule = f.rules[ri];
-                            filterString += '<' + rule.type + ' pattern="' + rule.pattern.source + '"/>';
-                        }
-                        filterString += '</filter>';
-                    }
-                }
-            }
-        } else {
-            if (filters) {
-                for (var i = 0; i < filters.length; i++) {
-                    f = filters[i];
-                    if (remotePath === '/' || remotePath.indexOf(f.root) === 0 || f.root.indexOf(remotePath) === 0) {
-                        if (f.rules.length > 0) {
-                            filterString += '<filter root="' + f.root + '">';
-                            for (ri = 0; ri < f.rules.length; ri++) {
-                                rule = f.rules[ri];
-                                filterString += '<' + rule.type + ' pattern="' + rule.pattern.source + '"/>';
-                            }
-                            filterString += '</filter>';
-                        } else {
-                            filterString += '<filter root="' + f.root + '"/>';
-                        }
-
-                    }
+                    filterString += '</filter>';
                 }
             }
         }
@@ -735,8 +700,27 @@
                                             }
                                         ).then(
                                             function () {
+                                                var filterSyncStatusFilters = {},
+                                                    filters = [],
+                                                    syncPath,
+                                                    f;
+                                                // we need to get the set of filters for what we're pushing
+                                                for (syncPath in fileSyncStatus) {
+                                                    if (fileSyncStatus.hasOwnProperty(syncPath)) {
+                                                        var entry = fileSyncStatus[syncPath];
+                                                        if (entry.result && entry.filter instanceof Filter) {
+                                                            f = entry.filter;
+                                                            filterSyncStatusFilters[f.root] = f;
+                                                        }
+                                                    }
+                                                }
+                                                for (syncPath in filterSyncStatusFilters) {
+                                                    if (filterSyncStatusFilters.hasOwnProperty(syncPath)) {
+                                                        filters.push(filterSyncStatusFilters[syncPath]);
+                                                    }
+                                                }
                                                 return createPackageMetaInf(tempFolder, remotePath, filters, 'tmp/repo', packageName,
-                                                    packageVersion.toString(), fileSyncStatus);
+                                                    packageVersion.toString());
                                             }
                                         ).then(
                                             function () {
@@ -762,7 +746,7 @@
                                     } else if (action === PULL) {
                                         var zipFileName = '';
                                         return createPackageMetaInf(tempFolder, remotePath, filters, 'tmp/repo', packageName,
-                                            packageVersion).then(
+                                            packageVersion.toString()).then(
                                             function () {
                                                 return createContentPackageArchive(tempFolder, 'pkg').then(
                                                     function (_zipFileName) {
