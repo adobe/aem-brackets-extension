@@ -101,7 +101,7 @@
         if (remotePath === '') {
             remotePath = '/';
         }
-        return remotePath;
+        return remotePath.replace(/\\/g, '/');
     }
 
     /**
@@ -121,7 +121,7 @@
      * @returns {String} the package name
      */
     function getPackageName(remotePath) {
-        return ('repo_' + remotePath.replace(/\//g, '_')).replace(/__/g, '_');
+        return ('repo_' + remotePath.replace(/\//g, '_')).replace(/\\/g, '_').replace(/__/g, '_');
     }
 
     /**
@@ -387,12 +387,12 @@
                 for (var ci = 0; ci < contents.length; ci++) {
                     cfile = contents[ci];
                     remoteFilePath = getRemotePath(cfile);
-                    remoteFilePath = remoteFilePath.replace(/\\/g, '/');
                     var relPath = Path.relative(remotePath, remoteFilePath);
                     for (i = 0; i < filters.length; i++) {
                         var filter = filters[i];
                         var syncStatus = filter.getSyncStatus(remoteFilePath);
-                        if (Path.basename(cfile) === '.content.xml') {
+                        if (Path.basename(cfile) === '.content.xml' &&
+                            (remoteFilePath.indexOf(filter.root) === 0 || filter.root.indexOf(Path.dirname(remoteFilePath)) === 0)) {
                             syncStatus = Constants.sync.FILTER_INCLUDED;
                         }
                         if (syncStatus === Constants.sync.FILTER_INCLUDED) {
