@@ -30,7 +30,8 @@
         appendFile = Q.denodeify(Fs.appendFile),
         readFile = Q.denodeify(Fs.readFile),
         glob = Q.denodeify(Glob),
-        stat = Q.denodeify(Fs.stat);
+        stat = Q.denodeify(Fs.stat),
+        Archiver = require('archiver');
 
     Q.longStackSupport = true;
     var PUSH = 'push';
@@ -441,16 +442,33 @@
      * @returns {promise|Q.promise}
      */
     function createContentPackageArchive(folder, archiveName) {
-        var zip = new AdmZip(),
-            zipFileName = folder + Path.sep + archiveName + '.zip',
-            deferred = Q.defer();
-        try {
-            zip.addLocalFolder(folder, '');
-            zip.writeZip(zipFileName);
-            deferred.resolve(zipFileName);
-        } catch (err) {
+        var deferred = Q.defer(),
+            archive = Archiver('zip'),
+            archivePath = folder + Path.sep + archiveName + '.zip',
+            archiveStream = Fs.createWriteStream(archivePath);
+
+        archiveStream.on('close', function () {
+            deferred.resolve(archivePath)
+        });
+
+        archive.on('error', function (err) {
             deferred.reject(err);
-        }
+        });
+
+        archive.pipe(archiveStream);
+        archive.bulk([
+            {
+                expand: true,
+                cwd: folder,
+                src: ['jcr_root' + Path.sep + '**', 'META-INF' + Path.sep + '**'],
+                dest: '.',
+                dot: true,
+                filter: function (file) {
+                    return !fileIsInBasicExcludes(file);
+                }
+            }
+        ]);
+        archive.finalize();
         return deferred.promise;
     }
 

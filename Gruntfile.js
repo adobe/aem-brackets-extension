@@ -30,6 +30,7 @@ module.exports = function (grunt) {
                             'sly/**',
                             'sling/*',
                             'node_modules/adm-zip/**',
+                            'node_modules/archiver/**',
                             'node_modules/fs-extra/**',
                             'node_modules/glob/**',
                             'node_modules/q/**',

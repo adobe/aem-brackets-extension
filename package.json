@@ -20,7 +20,9 @@
         "glob"    : "3.2.9",
         "fs-extra": "0.11.0",
         "xmldom"  : "0.1.19",
-        "xpath"   : "0.0.7"
+        "xpath"   : "0.0.7",
+        "unzip"   : "0.1.9",
+        "archiver": "0.10.1"
     },
     "devDependencies": {
         "grunt"                 : "~0.4.2",
