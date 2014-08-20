@@ -11,7 +11,7 @@
 2. [How to Install the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#how-to-install-the-aem-sightly-brackets-extension)
 3. [Working With the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#working-with-the-aem-sightly-brackets-extension)
   1. [The content-package project](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#the-content-package-project)
-  2. [Synchronising Content](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#synchronisation-settings)
+  2. [Synchronisation Settings](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#synchronisation-settings)
 4. [Known Issues or Limitations](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#known-issues-or-limitations)
 5. [Sample Application](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#sample-application)
 6. [Reporting Bugs](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#reporting-bugs)
