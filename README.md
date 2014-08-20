@@ -7,7 +7,7 @@
 * code-completion for Sightly expressions, `data-sly-*` block elements and Use-API Java objects;
 * bidirectional synchronisation.
 
-1. [Requirements](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#requirements)
+1. [Requirements](#requirements)
 2. [How to Install the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#how-to-install-the-aem-sightly-brackets-extension)
 3. [Working With the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#working-with-the-aem-sightly-brackets-extension)
   1. [The content-package project](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#the-content-package-project)
