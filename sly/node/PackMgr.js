@@ -203,10 +203,8 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
 
     function _errorDetected(err, httpResponse, serverURL, expectedStatusCode, deferred) {
         if (err) {
-            if (err.code === 'ECONNREFUSED') {
-                deferred.reject(new Error('Connection to server ' + serverURL + ' was refused'));
-                return true;
-            }
+            deferred.reject(new Error('Cannot establish a connection to server ' + serverURL + (err.code ? ': ' + err.code + '.' : '.')));
+            return true;
         } else {
             if (httpResponse) {
                 var statusCode = httpResponse.statusCode;
