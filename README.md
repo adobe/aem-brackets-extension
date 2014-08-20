@@ -7,6 +7,17 @@
 * code-completion for Sightly expressions, `data-sly-*` block elements and Use-API Java objects;
 * bidirectional synchronisation.
 
+1. [Requirements](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#requirements)
+2. [How to Install the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#how-to-install-the-aem-sightly-brackets-extension)
+3. [Working With the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#working-with-the-aem-sightly-brackets-extension)
+  1. [The content-package project](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#the-content-package-project)
+  2. [Synchronising Content](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#synchronisation-settings)
+4. [Known Issues or Limitations](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#known-issues-or-limitations)
+5. [Sample Application](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#sample-application)
+6. [Reporting Bugs](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#reporting-bugs)
+7. [Development](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#development)
+8. [Credits](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#credits)
+
 ## Requirements
 AEM Sightly Brackets Extension supports Brackets versions greater or equal than sprint 38. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
 
@@ -99,7 +110,7 @@ The AEM Sightly Brackets extension also supports [.vltignore](http://docs.adobe.
 ## Sample Application
 A sample application built with Brackets and the AEM Sightly Brackets Extension is available at [https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc](https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc "Sightly TodoMVC Example").
 
-## Reporting bugs
+## Reporting Bugs
 Please report any issues you encounter using GitHub's issue tracker from [https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues).
 
 In order to help us investigate the reported issues, please include, at minimum, the following information:
