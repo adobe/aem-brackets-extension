@@ -8,15 +8,15 @@
 * bidirectional synchronisation.
 
 1. [Requirements](#requirements)
-2. [How to Install the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#how-to-install-the-aem-sightly-brackets-extension)
-3. [Working With the AEM Sightly Brackets Extension](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#working-with-the-aem-sightly-brackets-extension)
-  1. [The content-package project](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#the-content-package-project)
-  2. [Synchronisation Settings](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#synchronisation-settings)
-4. [Known Issues or Limitations](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#known-issues-or-limitations)
-5. [Sample Application](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#sample-application)
-6. [Reporting Bugs](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#reporting-bugs)
-7. [Development](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#development)
-8. [Credits](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/blob/master/README.md#credits)
+2. [How to Install the AEM Sightly Brackets Extension](#how-to-install-the-aem-sightly-brackets-extension)
+3. [Working With the AEM Sightly Brackets Extension](#working-with-the-aem-sightly-brackets-extension)
+  1. [The content-package project](#the-content-package-project)
+  2. [Synchronisation Settings](#synchronisation-settings)
+4. [Known Issues or Limitations](#known-issues-or-limitations)
+5. [Sample Application](#sample-application)
+6. [Reporting Bugs](#reporting-bugs)
+7. [Development](#development)
+8. [Credits](#credits)
 
 ## Requirements
 AEM Sightly Brackets Extension supports Brackets versions greater or equal than sprint 38. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
