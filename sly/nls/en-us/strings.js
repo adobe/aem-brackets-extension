@@ -12,7 +12,7 @@ define({
     // Button labels
     BUTTON_OK                                        : 'OK',
     BUTTON_CANCEL                                    : 'Cancel',
-
+	
     // Menus
     // -- top level
     MENU_PROJECT_SETTINGS                            : 'Project Settings...',
@@ -22,6 +22,7 @@ define({
     // -- contextual menus
     CONTEXTUAL_PULL_REMOTE                           : 'Import from Server',
     CONTEXTUAL_PUSH_REMOTE                           : 'Export to Server',
+	CONTEXTUAL_CREATE_DIALOG						 : 'Create Dialog...',
 
     // Project Settings dialogue
     PROJECT_SETTINGS                                 : 'Project Settings',
