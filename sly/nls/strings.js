@@ -10,7 +10,8 @@ define(function (require, exports, module) {
     'use strict';
 
     module.exports = {
-        root: true,
-        ro: true
+        "root": true,
+        "ro": true,
+		"en-us": true
     };
 });
