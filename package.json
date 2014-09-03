@@ -12,7 +12,7 @@
     "license" : "MIT License",
     "keywords" : ["aem", "sightly", "templating"],
     "categories": ["editing", "language", "external"],
-    "i18n" : ["en", "ro"],
+    "i18n" : ["en", "ro", "en-gb"],
     "dependencies"   : {
         "request" : "~2.34.0",
         "adm-zip" : "0.4.4",
