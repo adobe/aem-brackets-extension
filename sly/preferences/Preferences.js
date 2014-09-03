@@ -59,15 +59,23 @@ define(function (require, exports, module) {
     scopes.serverUrl = 'project';
     scopes.remoteUser = 'project';
     scopes.remoteUserPassword = 'project';
+    scopes.syncedLanguages = 'user';
 
 
     /* get a preference */
     function get(pref) {
-        if (!slyPreferences.get(pref) && defaults[pref]) {
-            slyPreferences.set(pref, defaults[pref]);
+        var scope = scopes[pref] !== undefined ? scopes[pref] : 'default';
+        var context = {
+            location: {
+                scope: scope
+            },
+            scopeOrder: ['project', 'user']
+        };
+        if (!slyPreferences.get(pref, context) && defaults[pref]) {
+            slyPreferences.set(pref, defaults[pref], context);
             slyPreferences.save();
         }
-        return slyPreferences.get(pref);
+        return slyPreferences.get(pref, context);
     }
 
     function getRemote() {
