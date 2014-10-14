@@ -20,7 +20,7 @@ define(function (require, exports, module) {
         ProjectSettingsDialogTemplate = require('text!./project-settings-dialog.html'),
         Strings                       = require('strings'),
         slyPreferences                = PreferenceManager.getExtensionPrefs('sly'),
-        defaults,
+        defaults = {},
         validators = {},
         scopes = {};
 
