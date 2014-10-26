@@ -106,16 +106,14 @@ define(function (require, exports, module) {
                         contents.push(entry);
                         return true;
                     },
-                    {},
                     function (err) {
                         if (err) {
                             deferred.reject(new Error('Error visiting descendant of ' + folder + '. Reason: ' + err));
+                        } else {
+                            deferred.resolve(contents);
                         }
                     }
                 );
-                if (!deferred.isRejected) {
-                    deferred.resolve(contents);
-                }
             }
         });
         return deferred;
