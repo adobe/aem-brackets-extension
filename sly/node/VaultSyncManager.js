@@ -572,6 +572,59 @@
         return deferred.promise;
     }
 
+    function getHashForFile(file) {
+        var deferred = Q.defer();
+        var md5sum = Crypto.createHash('md5');
+        var stream = Fs.createReadStream(file);
+
+        stream.on('data', function (chunk) {
+            md5sum.update(chunk);
+        });
+
+        stream.on('end', function () {
+            deferred.resolve(md5sum.digest('hex'));
+        });
+
+        stream.on('error', function (error) {
+            deferred.reject(error);
+        });
+        return deferred.promise;
+    }
+
+    /**
+     * Prepares a map of hashes for an array of {@code files}. The map's keys are the file paths relative to the supplied {@code root}.
+     *
+     * @param {String} root the path root for which relative paths will be generated for the map's keys
+     * @param {Array.<String>} files an array of absolute file paths
+     * @returns {promise|Q.promise} a promise resolved with the map of hashes
+     */
+    function prepareHashesForFiles(root, files) {
+        var deferred = Q.defer(),
+            map = {},
+            promises = [],
+            i;
+        for (i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (Fs.statSync(file).isFile()) {
+                promises.push(getHashForFile(file));
+            }
+        }
+        Q.allSettled(promises).then(function (results) {
+            for (i = 0; i < results.length; i++) {
+                var result = results[i];
+                if (result.state === 'fulfilled') {
+                    map[Path.relative(root, files[i])] = result.value;
+                } else {
+                    deferred.reject(new Error(result.reason));
+                }
+            }
+            if (!deferred.isRejected) {
+                deferred.resolve(map);
+            }
+        });
+        return deferred.promise;
+    }
+
     function fileIsInBasicExcludes(file) {
         var i;
         file = Path.basename(file);
@@ -762,7 +815,9 @@
                                             }
                                         );
                                     } else if (action === PULL) {
-                                        var zipFileName = '';
+                                        var zipFileName = '',
+                                            localHashes,
+                                            tempHashes;
                                         return createPackageMetaInf(tempFolder, remotePath, filters, 'tmp/repo', packageName,
                                             packageVersion.toString()).then(
                                             function () {
@@ -811,6 +866,32 @@
                                                             }
                                                         );
                                                     }
+                                                ).then(
+                                                    function () {
+                                                        return getFolderContents(path).then(
+                                                            function (files) {
+                                                                return prepareHashesForFiles(path, files).then(
+                                                                    function (_hashes) {
+                                                                        localHashes = _hashes;
+                                                                    }
+                                                                )
+                                                            }
+                                                        );
+                                                    }
+                                                ).then(
+                                                    function () {
+                                                        var relativeSyncPath = Path.relative(getRootPath(path), path);
+                                                        var tempSyncPath = tempFolder + Path.sep + relativeSyncPath;
+                                                        return getFolderContents(tempSyncPath).then(
+                                                            function (files) {
+                                                                return prepareHashesForFiles(tempSyncPath, files).then(
+                                                                    function (_hashes) {
+                                                                        tempHashes = _hashes;
+                                                                    }
+                                                                )
+                                                            }
+                                                        );
+                                                    }
                                                 );
                                             }
                                         ).then(
@@ -834,8 +915,17 @@
                                                                     path,
                                                                     function (file) {
                                                                         var rPath = getRemotePath(file);
+                                                                        var relativePath = Path.relative(tempFolder + Path.sep + JCR_ROOT, file);
                                                                         if (copyFilter(file, fileSyncStatus)) {
                                                                             pathsFromRemote[rPath] = true;
+                                                                            var tempHash = tempHashes[relativePath];
+                                                                            var localHash = localHashes[relativePath];
+                                                                            if (localHash) {
+                                                                                if (localHash === tempHash) {
+                                                                                    return false;
+                                                                                }
+                                                                                return true;
+                                                                            }
                                                                             return true;
                                                                         }
                                                                         return false;

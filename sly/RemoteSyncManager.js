@@ -46,7 +46,7 @@ define(function (require, exports, module) {
         }
     }
     
-    function handleSyncToRemote(path) {
+    function _handleSyncToRemote(path) {
         var cmd      = Preferences.get('pushCommand'),
             selected = ProjectManager.getSelectedItem(),
             pathToSync;
@@ -85,7 +85,7 @@ define(function (require, exports, module) {
         }
     }
 
-    function handleSyncFromRemote(path) {
+    function _handleSyncFromRemote(path) {
         var cmd      = Preferences.get('pullCommand'),
             selected = ProjectManager.getSelectedItem(),
             pathToSync;
@@ -124,54 +124,6 @@ define(function (require, exports, module) {
             SlyDomain.exec('syncChildProcess', cmd, selected.fullPath).done();
         }
     }
-    
-    /* return sling path from document */
-    function _syncDoc(doc) {
-        var cmd = Preferences.get('pushCommand');
-        if (!cmd) {
-            ProjectUtils.getJcrRoot().then(
-                function (root) {
-                    if (root) {
-                        if (doc.file.fullPath.indexOf(root) === 0) {
-                            if (doc.language && (Preferences.getSyncedLanguages().indexOf(doc.language.getId()) >= 0)) {
-                                var path = doc.file.fullPath;
-                                if (doc.file.name === '.content.xml') {
-                                    path = doc.file.parentPath;
-                                }
-                                ProjectUtils.getFilterFile().then(
-                                    function (filterFile) {
-                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_IN_PROGRESS);
-                                        return SlyDomain.exec('pushVault', path, filterFile).then(
-                                            function (fileSyncStatus) {
-                                                _calculateSyncStatus(fileSyncStatus);
-                                            },
-                                            function (err) {
-                                                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
-                                                Dialogs.showModalDialog(
-                                                    DefaultDialogs.DIALOG_ID_ERROR,
-                                                    'Synchronisation error',
-                                                    err
-                                                );
-
-                                            }
-                                        );
-                                    }
-                                ).done();
-                            } else {
-                                console.debug('document is not managed in sync languages : ' + Preferences.getSyncedLanguages());
-                            }
-                        }
-                    }
-                }
-            ).done();
-        } else {
-            SlyDomain.exec('syncChildProcess', cmd, doc.file.fullPath).done();
-        }
-    }
-        
-    function _onSave(event, doc) {
-        _syncDoc(doc);
-    }
 
     function _calculateSyncStatus(fileSyncStatus) {
         if (fileSyncStatus instanceof Array) {
@@ -200,6 +152,7 @@ define(function (require, exports, module) {
                         break;
                 }
                 syncStatus.push({path: fileSyncStatus[i].path, status: status});
+                console.log('Path ' + fileSyncStatus[i].path + ' was ' + status);
             }
             SessionStorage.put('syncStatus', syncStatus);
             if (syncedFiles === 0) {
@@ -210,6 +163,11 @@ define(function (require, exports, module) {
                 ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_PARTIAL);
             }
         }
+    }
+
+    function _toggleSyncContextMenu(toggle) {
+        CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
+        CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
     }
 
     /* return neighbours of a given doc in the hierarchy */
@@ -239,11 +197,6 @@ define(function (require, exports, module) {
             dfd.done(neighbours.paths);
         }
         return dfd;
-    }
-
-    function _toggleSyncContextMenu(toggle) {
-        CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
-        CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
     }
 
     function exportContentPackage() {
@@ -279,10 +232,9 @@ define(function (require, exports, module) {
     }
 
     function load(SLYDictionary) {
-        $(DocumentManager).on('documentSaved', _onSave);
         _uploadSlingDependencies();
-        CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, handleSyncFromRemote);
-        CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, handleSyncToRemote);
+        CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, _handleSyncFromRemote);
+        CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, _handleSyncToRemote);
         var project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
         project_cmenu.addMenuDivider();
         project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
@@ -302,6 +254,20 @@ define(function (require, exports, module) {
                     }
                 }
             ).done();
+        });
+
+        FileSystem.on('change', function (event, entry, addedEntries, removedEntries) {
+            if (entry.isFile) {
+                if (entry.name === '.content.xml') {
+                    _handleSyncToRemote(entry.parentPath);
+                } else {
+                    _handleSyncToRemote(entry.fullPath);
+                }
+            } else if (entry.isDirectory) {
+                if ((addedEntries && addedEntries.length > 0) || (removedEntries && removedEntries.length > 0)) {
+                    _handleSyncToRemote(entry.fullPath);
+                }
+            }
         });
 
     }
