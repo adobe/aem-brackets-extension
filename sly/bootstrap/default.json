@@ -1,7 +1,4 @@
 {
-    "preferences":{
-        "syncedLanguages": ["html", "css", "javascript", "xml"]
-    },
     "constants":{
         "SHORTCUT": "sly",
         "PREFIX": "data-sly-",
