@@ -20,7 +20,6 @@ define(function (require, exports, module) {
         ProjectSettingsDialogTemplate = require('text!./project-settings-dialog.html'),
         Strings                       = require('strings'),
         slyPreferences                = PreferenceManager.getExtensionPrefs('sly'),
-        defaults = {},
         validators = {},
         scopes = {};
 
@@ -71,10 +70,6 @@ define(function (require, exports, module) {
             },
             scopeOrder: ['project', 'user']
         };
-        if (!slyPreferences.get(pref, context) && defaults[pref]) {
-            slyPreferences.set(pref, defaults[pref], context);
-            slyPreferences.save();
-        }
         return slyPreferences.get(pref, context);
     }
 
@@ -95,7 +90,6 @@ define(function (require, exports, module) {
     }
 
     function load(SLYDictionary) {
-        defaults = SLYDictionary.preferences;
         SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword());
     }
 
