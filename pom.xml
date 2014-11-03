@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.adobe.aem</groupId>
     <artifactId>aem-sightly-brackets-extension</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
 
     <name>Adobe Experience Manager - Brackets Sightly Extension</name>
     <description>Builds the Brackets extension sling subfolder</description>
