@@ -2,7 +2,7 @@
     "name"           : "aem-sightly-brackets-extension",
     "title"          : "AEM Sightly Brackets Extension",
     "description"    : "Sightly is the new HTML templating system introduced with Adobe Experience Manager 6.0. The AEM Sightly Brackets Extension provides a smoother development workflow for writing AEM components, adding support for syntax-highlighting, code-completion, bi-directional synchronisation and more.",
-    "version"        : "0.0.10-dev",
+    "version"        : "0.0.10",
     "engines"        : {
         "brackets": ">=0.38.0"
     },
