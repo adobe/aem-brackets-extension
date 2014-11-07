@@ -31,7 +31,8 @@
         readFile = Q.denodeify(Fs.readFile),
         glob = Q.denodeify(Glob),
         stat = Q.denodeify(Fs.stat),
-        Archiver = require('archiver');
+        Archiver = require('archiver'),
+        VaultIgnoreParser = require('./VaultIgnore');
 
     Q.longStackSupport = true;
     var PUSH = 'push';
@@ -225,7 +226,7 @@
                         var promises = [];
                         for (var i = 0; i < files.length; i++) {
                             var file = searchFolder + Path.sep + files[i];
-                            var relPath = file.substring(0, file.lastIndexOf(Path.sep)).replace(path, '');
+                            var relPath = '/' + file.substring(0, file.lastIndexOf(Path.sep)).replace(path, '');
                             if (relPath[0] === '/' && relPath.length > 1) {
                                 relPath = relPath.substring(1, relPath.length);
                             } else if (relPath === '/') {
@@ -254,29 +255,11 @@
     }
 
     /**
-     * Checks if a remote path is allowed for synchronisation by the filters defined in the filter file.
-     *
-     * @param {String} remotePath the remote path
-     * @param {Filter[]} filters the filters array
-     * @returns {Boolean} <code>true</code> if the path is allowed to be synced, <code>false</code> otherwise
-     * @see parseFilterXML
-     */
-    function remotePathAllowedByFilters(remotePath, filters) {
-        for (var i = 0; i < filters.length; i++) {
-            var filter = filters[i];
-            var syncStatus = filter.getSyncStatus(remotePath);
-            if (syncStatus === Constants.sync.FILTER_INCLUDED) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Creates the meta-inf file structure for the content package that will be uploaded.
      *
      * @param {String} tempWorkingDirectory the random unique temporary folder
-     * @param {String} filter the content package's filter
+     * @param {String} remotePath the remote path to which the sync is performed
+     * @param {Array.<Filter>} filters the Apache JackRabbit FileVault filters for the package that will be synchronised
      * @param {String} packageGroup the package group
      * @param {String} packageName the package name
      * @param {String} packageVersion the package version
@@ -335,13 +318,13 @@
     /**
      * Builds a list of files that can be synchronised according to the defined <code>filters</code> and <code>excludePatterns</code>.
      *
-     * @param {Filter[]} filters the Apache Jackrabbit FileVault filter rules (see #parseFilterXML)
-     * @param {Array} excludesPatterns an patterns array (all the patterns should be valid RegEx objects)
+     * @param {Array.<Filter>} filters the Apache Jackrabbit FileVault filter rules (see #parseFilterXML)
+     * @param {Object} vaultIgnore the vaultIgnore object obtained from {VaultIgnore#compile}
      * @param {String} file the path of a file from the file system
      * @return {promise|Q.promise} a promise resolved with an object containing the pre-sync status; the object's direct properties are
      * file paths storing objects like {filter: Filter, result: Number, remoteFilePath: String} or {result: Number, remoteFilePath: String}
      */
-    function buildSyncStatusList(filters, excludesPatterns, file) {
+    function buildSyncStatusList(filters, vaultIgnore, file) {
         var deferred = Q.defer(),
             fileSyncStatus = {},
             i;
@@ -376,44 +359,12 @@
                         }
                     }
                     if (fileSyncStatus[remoteFilePath] && fileSyncStatus[remoteFilePath].result === Constants.sync.FILTER_INCLUDED) {
-                        for (i = 0; i < excludesPatterns.length; i++) {
-                            var pattern = excludesPatterns[i];
-                            // for windows replace any path separators with /
-                            if (pattern.test(Path.basename(remoteFilePath)) || pattern.test(relPath)) {
-                                fileSyncStatus[remoteFilePath] = {result: -2};
-                            }
+                        if (vaultIgnore.denies(relPath)) {
+                            fileSyncStatus[remoteFilePath] = {result: -2};
                         }
                     }
                 }
                 deferred.resolve(fileSyncStatus);
-            }
-        ).done();
-        return deferred.promise;
-    }
-
-    /**
-     * Reads an excludes file and generates a patterns array that can be used to match files.
-     *
-     * @param {String} excludesFile the path to the excludes file
-     * @returns {promise|Q.promise} an array containing a pattern for each line of the excludes file
-     */
-    function excludesPatternsGenerator(excludesFile) {
-        var deferred = Q.defer();
-        readFile(excludesFile).then(
-            function (fileContents) {
-                var result = [],
-                    lines = fileContents.toString().split('\n');
-                lines.forEach(function (line) {
-                    if (line) {
-                        result.push(
-                            new RegExp('^' + line.replace(/\\/g, '\\\\').replace(/\./g, '\\.').replace(/\*/g, '.*') + '(\\.dir)?$')
-                        );
-                    }
-                });
-                deferred.resolve(result);
-            },
-            function (error) {
-                deferred.reject(new Error(error));
             }
         ).done();
         return deferred.promise;
@@ -565,7 +516,7 @@
                     deferred.resolve(results);
                 });
             },
-            function (err) {
+            function () {
                 deferred.resolve([]);
             }
         ).done();
@@ -718,7 +669,8 @@
                 filters = [],
                 fileSyncStatus = {},
                 remotePath = getRemotePath(path),
-                pathsFromRemote = {};
+                pathsFromRemote = {},
+                vaultIgnore;
             parseFilterXML(filterFile).then(
                 function (_filters) {
                     filters = _filters;
@@ -742,13 +694,10 @@
                             ).then(
                                 function (excludesFilePath) {
                                     if (action === PUSH) {
-                                        return excludesPatternsGenerator(excludesFilePath).then(
-                                            function (excludesPatterns) {
-                                                return buildSyncStatusList(filters, excludesPatterns, path).then(
-                                                    function (_fileSyncStatus) {
-                                                        fileSyncStatus = _fileSyncStatus;
-                                                    }
-                                                );
+                                        vaultIgnore = VaultIgnoreParser.compile(Fs.readFileSync(excludesFilePath, 'utf8'));
+                                        return buildSyncStatusList(filters, vaultIgnore, path).then(
+                                            function (_fileSyncStatus) {
+                                                fileSyncStatus = _fileSyncStatus;
                                             }
                                         ).then(
                                             function () {
@@ -897,14 +846,11 @@
                                         ).then(
                                             function () {
                                                 excludesFilePath = tempFolder + Path.sep + '.excludes';
-                                                return excludesPatternsGenerator(excludesFilePath).then(
-                                                    function (excludesPatterns) {
-                                                        return buildSyncStatusList(filters, excludesPatterns,
-                                                                tempFolder + Path.sep + JCR_ROOT + filter).then(
-                                                            function (_fileSyncStatus) {
-                                                                fileSyncStatus = _fileSyncStatus;
-                                                            }
-                                                        );
+                                                vaultIgnore = VaultIgnoreParser.compile(Fs.readFileSync(excludesFilePath, 'utf8'));
+                                                return buildSyncStatusList(filters, vaultIgnore,
+                                                        tempFolder + Path.sep + JCR_ROOT + filter).then(
+                                                    function (_fileSyncStatus) {
+                                                        fileSyncStatus = _fileSyncStatus;
                                                     }
                                                 ).then(
                                                     function () {
@@ -921,10 +867,7 @@
                                                                             var tempHash = tempHashes[relativePath];
                                                                             var localHash = localHashes[relativePath];
                                                                             if (localHash) {
-                                                                                if (localHash === tempHash) {
-                                                                                    return false;
-                                                                                }
-                                                                                return true;
+                                                                                return !(localHash === tempHash);
                                                                             }
                                                                             return true;
                                                                         }
@@ -967,12 +910,12 @@
                                                                     for (i = 0; i < files.length; i++) {
                                                                         file = files[i];
                                                                         rPath = getRemotePath(file);
-                                                                        if (!pathsFromRemote[rPath]) {
+                                                                        if (!pathsFromRemote[rPath] && vaultIgnore.accepts(rPath.slice(1))) {
                                                                             if (!fileIsInBasicExcludes(file)) {
                                                                                 fileSyncStatus[rPath] = {
                                                                                     path: file,
                                                                                     result: Constants.sync.DELETED_FROM_REMOTE
-                                                                                }
+                                                                                };
                                                                                 remove(file).done();
                                                                             }
                                                                         }
