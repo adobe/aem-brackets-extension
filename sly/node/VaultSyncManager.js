@@ -650,6 +650,7 @@
      * Synchronises the supplied file-system path path with an AEM server.
      *
      * @param {String} server the URL of the AEM server (e.g. http://localhost:4502/contextpath)
+     * @param {boolean} acceptSelfSignedCert flag to indicate if self-signed certificates should be accepted or not
      * @param {String} user the user used for synchronisation
      * @param {String} password the user's password
      * @param {String} path the path on the file-system for which to perform the synchronisation operation
@@ -657,7 +658,7 @@
      * @param {String} action the synchronisation operation type (VaultSyncManager.PULL or VaultSyncManager.PUSH)
      * @returns {promise|Q.promise} a promise resolved when the synchronisation operation completed successfully
      */
-    function sync(server, user, password, path, filterFile, action) {
+    function sync(server, acceptSelfSignedCert, user, password, path, filterFile, action) {
         var deferred = Q.defer();
         path = Path.resolve(path);
         if (isPathInJCRCheckout(path)) {
@@ -670,6 +671,7 @@
                 fileSyncStatus = {},
                 remotePath = getRemotePath(path),
                 pathsFromRemote = {},
+                acceptSelfSigned = acceptSelfSignedCert || false,
                 vaultIgnore;
             parseFilterXML(filterFile).then(
                 function (_filters) {
@@ -748,11 +750,11 @@
                                             }
                                         ).then(
                                             function (zipFileName) {
-                                                return PackMgr.uploadPackage(server, user, password, zipFileName).then(
+                                                return PackMgr.uploadPackage(server, acceptSelfSigned, user, password, zipFileName).then(
                                                     function () {
-                                                        return PackMgr.installPackage(server, user, password, fullPackageName).then(
+                                                        return PackMgr.installPackage(server, acceptSelfSigned, user, password, fullPackageName).then(
                                                             function () {
-                                                                return PackMgr.deletePackage(server, user, password, fullPackageName);
+                                                                return PackMgr.deletePackage(server, acceptSelfSigned, user, password, fullPackageName);
                                                             }
                                                         );
                                                     }
@@ -773,10 +775,10 @@
                                                 return createContentPackageArchive(tempFolder, 'pkg').then(
                                                     function (_zipFileName) {
                                                         zipFileName = _zipFileName;
-                                                        return PackMgr.uploadPackage(server, user, password, zipFileName)
+                                                        return PackMgr.uploadPackage(server, acceptSelfSigned, user, password, zipFileName)
                                                             .then(
                                                             function () {
-                                                                return PackMgr.buildPackage(server, user, password, fullPackageName);
+                                                                return PackMgr.buildPackage(server, acceptSelfSigned, user, password, fullPackageName);
                                                             }
                                                         );
                                                     }
@@ -804,10 +806,10 @@
                                         ).then(
                                             function () {
                                                 return PackMgr.downloadPackage(
-                                                    server, user, password, fullPackageName, tempFolder, 'pkg.zip'
+                                                    server, acceptSelfSigned, user, password, fullPackageName, tempFolder, 'pkg.zip'
                                                 ).then(
                                                     function (downloadedPackage) {
-                                                        return PackMgr.deletePackage(server, user, password,
+                                                        return PackMgr.deletePackage(server, acceptSelfSigned, user, password,
                                                             fullPackageName).then(
                                                             function () {
                                                                 return extractContentPackageArchive(tempFolder,

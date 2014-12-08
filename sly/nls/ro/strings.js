@@ -36,6 +36,7 @@ define({
     PROJECT_SETTING_SERVER_URL_ERROR_INVALID_CHAR    : 'Caracterele speciale precum \'{0}\' trebuie să fie %-codificate.',
     PROJECT_SETTING_REMOTE_USER_ERROR_EMPTY          : 'Vă rugăm să introduceți utilizatorul.',
     PROJECT_SETTING_REMOTE_USER_PASSWORD_ERROR_EMPTY : 'Vă rugăm să introduceți parola.',
+    PROJECT_SETTING_ACCEPT_SELF_SIGNED_CERTIFICATES  : 'Acceptați certificate care nu sunt semnate de CA',
 
     // Synchronisation indicator tooltip
     SYNC_FULL                                        : 'Toate fișierele selectate au fost sincronizate cu succes.',

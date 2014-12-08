@@ -36,6 +36,7 @@ define({
     PROJECT_SETTING_SERVER_URL_ERROR_INVALID_CHAR    : 'Special characters like \'{0}\' must be %-encoded.',
     PROJECT_SETTING_REMOTE_USER_ERROR_EMPTY          : 'Please provide a username.',
     PROJECT_SETTING_REMOTE_USER_PASSWORD_ERROR_EMPTY : 'Please provide a password.',
+    PROJECT_SETTING_ACCEPT_SELF_SIGNED_CERTIFICATES  : 'Accept self-signed certificates for HTTPS',
 
     // Synchronisation indicator tooltip
     SYNC_FULL                                        : 'All selected files were synced successfully.',

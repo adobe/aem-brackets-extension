@@ -39,25 +39,26 @@ define(function (require, exports, module) {
             return StringUtils.format(Strings.PROJECT_SETTING_SERVER_URL_ERROR_INVALID_CHAR, url[index]);
         }
         return '';
-    }
+    };
 
     validators.remoteUser = function(user) {
         if (user === '') {
             return Strings.PROJECT_SETTING_REMOTE_USER_ERROR_EMPTY;
         }
         return '';
-    }
+    };
 
     validators.remoteUserPassword = function(password) {
         if (password === '') {
             return Strings.PROJECT_SETTING_REMOTE_USER_PASSWORD_ERROR_EMPTY;
         }
         return '';
-    }
+    };
 
     scopes.serverUrl = 'project';
     scopes.remoteUser = 'project';
     scopes.remoteUserPassword = 'project';
+    scopes.acceptSelfSignedCertificates = 'project';
     scopes.syncedLanguages = 'user';
 
 
@@ -77,6 +78,10 @@ define(function (require, exports, module) {
         return get('serverUrl');
     }
 
+    function acceptSelfSignedCertificates() {
+        return get('acceptSelfSignedCertificates');
+    }
+
     function getRemoteUser() {
         return get('remoteUser');
     }
@@ -90,7 +95,7 @@ define(function (require, exports, module) {
     }
 
     function load(SLYDictionary) {
-        SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword());
+        SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword(), acceptSelfSignedCertificates());
     }
 
     function openProjectPreferences(errorMessage) {
@@ -102,6 +107,7 @@ define(function (require, exports, module) {
             serverUrl : getRemote(),
             remoteUser : getRemoteUser(),
             remoteUserPassword : getRemotePassword(),
+            acceptSelfSignedCertificates: acceptSelfSignedCertificates(),
             errorMessage : errorMessage
         };
         dialog = Dialogs.showModalDialogUsingTemplate(Mustache.render(ProjectSettingsDialogTemplate, templateVars));
@@ -109,6 +115,18 @@ define(function (require, exports, module) {
         dialog.done(function(id) {
             if (id === Dialogs.DIALOG_BTN_OK) {
                 formData = dialog.getElement().find('form').serializeArray();
+                var i,
+                    found = false;
+                for (i = 0; i < formData.length; i++) {
+                    var entry = formData[i];
+                    if (entry.name === 'acceptSelfSignedCertificates' && entry.value === 'on') {
+                        formData[i] = {name: 'acceptSelfSignedCertificates', value: true};
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    formData.push({name: 'acceptSelfSignedCertificates', value: false});
+                }
                 var validationResult = _validatePreferencesForm(formData);
                 if (validationResult === '') {
                     formData.forEach(function(entry) {
@@ -154,7 +172,7 @@ define(function (require, exports, module) {
 
     slyPreferences.on(
         'change', function (err, data) {
-            SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword());
+            SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword(), acceptSelfSignedCertificates());
         }
     );
 
@@ -164,5 +182,6 @@ define(function (require, exports, module) {
     exports.getSyncedLanguages = getSyncedLanguages;
     exports.getRemoteUser = getRemoteUser;
     exports.getRemotePassword = getRemotePassword;
+    exports.acceptSelfSignedCertificates = acceptSelfSignedCertificates;
     exports.openProjectPreferences = openProjectPreferences;
 });

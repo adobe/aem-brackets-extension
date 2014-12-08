@@ -23,23 +23,19 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
     /**
      * Uploads the ZIP content package from <code>packageFilePath</code> to the AEM instance from <code>serverURL</code>.
      * @param {String} serverURL the server's URL (e.g. http://localhost:4502)
+     * @param {boolean} acceptSelfSigned boolean flag to indicate if self-signed certificates should be acceppted for HTTPs connections
      * @param {String} user a user allowed to manage content packages
      * @param {String} password the user's password
      * @param {String} packageFilePath the path to the content package on the file system
      * @returns {promise|Q.promise} a promise
      */
-    function uploadPackage(serverURL, user, password, packageFilePath) {
+    function uploadPackage(serverURL, acceptSelfSigned, user, password, packageFilePath) {
         var deferred = Q.defer(),
             packageStream = Fs.createReadStream(packageFilePath),
             uri = serverURL + URL + '?cmd=upload';
         var r = Request.post(
             uri,
-            {
-                auth: {
-                    user: user,
-                    pass: password
-                }
-            },
+            _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
                     var response = JSON.parse(body);
@@ -61,22 +57,18 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
     /**
      * Installs a previously uploaded content package on the AEM instance from <code>serverURL</code>.
      * @param {String} serverURL the server's URL (e.g. http://localhost:4502)
+     * @oaram {boolean} acceptSelfSigned boolean flag to indicate if self-signed certificates should be acceppted for HTTPs connections
      * @param {String} user a user allowed to manage content packages
      * @param {String} password the user's password
      * @param {String} packageName the full content package name (e.g. 'group/name-version.zip')
      * @returns {promise|Q.promise} a promise
      */
-    function installPackage(serverURL, user, password, packageName) {
+    function installPackage(serverURL, acceptSelfSigned, user, password, packageName) {
         var deferred = Q.defer(),
             uri = serverURL + URL + '/etc/packages/' + packageName + '?cmd=install';
         Request.post(
             uri,
-            {
-                auth: {
-                    user: user,
-                    pass: password
-                }
-            },
+            _createRequestOptions(user, password, acceptSelfSigned),
             function (err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
                     var response = JSON.parse(body);
@@ -94,22 +86,18 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
     /**
      * Builds a previously uploaded content package on the AEM instance from <code>serverURL</code>.
      * @param {String} serverURL the server's URL (e.g. http://localhost:4502)
+     * @oaram {boolean} acceptSelfSigned boolean flag to indicate if self-signed certificates should be acceppted for HTTPs connections
      * @param {String} user a user allowed to manage content packages
      * @param {String} password the user's password
      * @param {String} packageName the full content package name (e.g. 'group/name-version.zip
      * @returns {promise|Q.promise} a promise
      */
-    function buildPackage(serverURL, user, password, packageName) {
+    function buildPackage(serverURL, acceptSelfSigned, user, password, packageName) {
         var deferred = Q.defer(),
             uri = serverURL + URL + '/etc/packages/' + packageName + '?cmd=build';
         Request.post(
             uri,
-            {
-                auth: {
-                    user: user,
-                    pass: password
-                }
-            },
+            _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
                     var response = JSON.parse(body);
@@ -127,22 +115,18 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
     /**
      * Deletes a previously uploaded content package on the AEM instance from <code>serverURL</code>.
      * @param {String} serverURL the server's URL (e.g. http://localhost:4502)
+     * @oaram {boolean} acceptSelfSigned boolean flag to indicate if self-signed certificates should be acceppted for HTTPs connections
      * @param {String} user a user allowed to manage content packages
      * @param {String} password the user's password
      * @param {String} packageName the full content package name (e.g. 'group/name-version.zip)
      * @returns {promise|Q.promise} a promise
      */
-    function deletePackage(serverURL, user, password, packageName) {
+    function deletePackage(serverURL, acceptSelfSigned, user, password, packageName) {
         var deferred = Q.defer(),
             uri = serverURL + URL + '/etc/packages/' + packageName + '?cmd=delete';
         Request.post(
             uri,
-            {
-                auth: {
-                    user: user,
-                    pass: password
-                }
-            },
+            _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
                     var response = JSON.parse(body);
@@ -161,6 +145,7 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
      * Downloads package <code>packageName</code> from the AEM instance available at <code>serverURL</code> to the <code>outputFolder</code>
      * folder.
      * @param {String} serverURL the server's URL (e.g. http://localhost:4502)
+     * @oaram {boolean} acceptSelfSigned boolean flag to indicate if self-signed certificates should be acceppted for HTTPs connections
      * @param {String} user a user allowed to manage content packages
      * @param {String} password the user's password
      * @param {String} packageName the full content package name (e.g. 'group/name-version.zip)
@@ -168,7 +153,7 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
      * @param {String} [outputFileName] the file name under which to save the downloaded package
      * @returns {promise|Q.promise} a promise
      */
-    function downloadPackage(serverURL, user, password, packageName, outputFolder, outputFileName) {
+    function downloadPackage(serverURL, acceptSelfSigned, user, password, packageName, outputFolder, outputFileName) {
         var deferred = Q.defer(),
             uri = serverURL + '/etc/packages/' + packageName,
             mkdirp = Q.denodeify(Fs.mkdirp);
@@ -180,12 +165,7 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             function() {
                 var r = Request.get(
                     uri,
-                    {
-                        auth: {
-                            user: user,
-                            pass: password
-                        }
-                    },
+                    _createRequestOptions(user, password, acceptSelfSigned),
                     function(err, httpResponse) {
                         _errorDetected(err, httpResponse, serverURL, 200, deferred);
                     }
@@ -221,6 +201,18 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             }
         }
         return false;
+    }
+
+    function _createRequestOptions(user, password, acceptSelfSigned) {
+        return {
+            auth: {
+                user: user,
+                pass: password
+            },
+            agentOptions: {
+                rejectUnauthorized: !acceptSelfSigned
+            }
+        }
     }
 
     exports.uploadPackage = uploadPackage;

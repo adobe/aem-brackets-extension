@@ -19,6 +19,11 @@
                             <td><input type="text" placeholder="{{Strings.PROJECT_SETTING_SERVER_URL_HINT}}" value="{{serverUrl}}"
                                        name="serverUrl" id="serverUrl"/></td>
                         </tr>
+                        <tr id="certificates-check">
+                            <td class="settings-parameter">{{Strings.PROJECT_SETTING_ACCEPT_SELF_SIGNED_CERTIFICATES}}:</td>
+                            <td><input type="checkbox" name="acceptSelfSignedCertificates" id="acceptSelfSignedCertificates"
+                                    {{#acceptSelfSignedCertificates}}checked{{/acceptSelfSignedCertificates}} /></td>
+                        </tr>
                         <tr>
                             <td class="settings-parameter">{{Strings.PROJECT_SETTING_REMOTE_USER}}:</td>
                             <td><input type="text" placeholder="{{Strings.PROJECT_SETTING_REMOTE_USER_HINT}}" value="{{remoteUser}}"
@@ -42,3 +47,24 @@
         <button class="dialog-button btn primary" data-button-id="ok">{{Strings.BUTTON_OK}}</button>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $acceptSelfSigned = $('#acceptSelfSignedCertificates');
+        $acceptSelfSigned.prop('disabled', true);
+        var $serverUrl = $('#serverUrl');
+        if ($serverUrl.val().indexOf('https://') === 0) {
+            $acceptSelfSigned.prop('disabled', false);
+        }
+        var $acceptSelfSigned = $('#acceptSelfSignedCertificates');
+        $serverUrl.change( function () {
+            var serverURL = $serverUrl.val();
+            if (serverURL.indexOf('https://') === 0) {
+                $acceptSelfSigned.prop('disabled', false);
+                $acceptSelfSigned.focus();
+            } else {
+                $acceptSelfSigned.prop('disabled', true);
+                $acceptSelfSigned.prop('checked', false);
+            }
+        });
+    });
+</script>
