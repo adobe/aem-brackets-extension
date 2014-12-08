@@ -257,16 +257,10 @@ define(function (require, exports, module) {
         });
 
         FileSystem.on('change', function (event, entry, addedEntries, removedEntries) {
-            if (entry.isFile) {
-                if (entry.name === '.content.xml') {
+            if (entry.isFile && entry.name === '.content.xml') {
                     _handleSyncToRemote(entry.parentPath);
-                } else {
+            } else {
                     _handleSyncToRemote(entry.fullPath);
-                }
-            } else if (entry.isDirectory) {
-                if ((addedEntries && addedEntries.length > 0) || (removedEntries && removedEntries.length > 0)) {
-                    _handleSyncToRemote(entry.fullPath);
-                }
             }
         });
 
