@@ -20,7 +20,7 @@ define(function (require, exports, module) {
         KeyBindingManager = brackets.getModule('command/KeyBindingManager');
 
     function load(SLYDictionary) {
-        var appMenu = Menus.addMenu('Sightly', 'adobe.brackets.sly', Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
+        var appMenu = Menus.addMenu('AEM', 'sly.adobe.main', Menus.BEFORE, Menus.AppMenuBar.HELP_MENU);
         var openProjectPreferencesCommand = CommandManager.register(
             Commands.MENU.projectPreferences.name,
             Commands.MENU.projectPreferences.id,

@@ -16,7 +16,6 @@ define(function (require, exports, module) {
         AEM_INDICATOR = 'sly-status-aem',
         DISABLED_TOOLBAR_BUTTON_CLASS = 'disabled-toolbar-button',
         states = {},
-        statusIconPath = require.toUrl('./brackets_sightly_icons.svg'),
         $slySyncStatus;
 
     states.INACTIVE = {title: Strings.AEM_SLY_EXTENSION, style: 'sly-status-inactive'};
@@ -27,19 +26,17 @@ define(function (require, exports, module) {
 
     function load() {
         var templateVars = {
-            icon: statusIconPath,
             title: Strings.AEM_SLY_EXTENSION
         };
         $slySyncStatus = $(Mustache.render(ToolBarIndicatorTemplate, templateVars));
         $slySyncStatus.addClass(DISABLED_TOOLBAR_BUTTON_CLASS).addClass(states.INACTIVE.style);
-        $slySyncStatus.appendTo('#main-toolbar div.bottom-buttons');
+        $slySyncStatus.appendTo('#main-toolbar div.buttons');
     }
 
     function updateStatusIndicator(show, state, title, errorMessage) {
         if (show === true) {
             if (state) {
                 var templateVars = {
-                    icon : statusIconPath,
                     title: title || state.title
                 };
                 var template = Mustache.render(ToolBarIndicatorTemplate, templateVars);
