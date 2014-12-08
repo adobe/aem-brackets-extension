@@ -31,12 +31,12 @@ define(function (require, exports, module) {
     var LanguageManager     = brackets.getModule("language/LanguageManager"),
         htmlLanguage        = LanguageManager.getLanguage("html"),
         DocumentManager     = brackets.getModule("document/DocumentManager"),
+        MainViewManager     = brackets.getModule('view/MainViewManager'),
         Tokenizer           = brackets.getModule("language/HTMLTokenizer").Tokenizer,
         PerfUtils           = brackets.getModule("utils/PerfUtils"),
         HTMLUtils           = brackets.getModule("language/HTMLUtils"),
         isParsing           = false,
         formerDoc,
-        refreshRequired,
         slyConstants,
         slyAttributesListeners,
         attributes;
@@ -240,7 +240,7 @@ define(function (require, exports, module) {
         $.each(slyConstants.EXTENSIONS, function (index, extension) {
             htmlLanguage.addFileExtension(extension);
         });
-        $(DocumentManager).on("currentDocumentChange", _onFocusedDocChanged);
+        $(MainViewManager).on('currentFileChange', _onFocusedDocChanged)
         $(DocumentManager).on("documentSaved", _onFocusedDocChanged);
     }
     
