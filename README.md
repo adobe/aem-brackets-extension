@@ -1,15 +1,15 @@
-# AEM Sightly Brackets Extension
+# AEM Brackets Extension
 ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/brackets_sightly_ext_sightly.png)
 
-[Sightly](http://docs.adobe.com/content/docs/en/aem/6-0/develop/sightly.html "Sightly") is the new HTML templating system introduced with Adobe Experience Manager 6.0. The AEM Sightly Brackets Extension provides a smoother development workflow for writing AEM components, offering several features like:
+[Sightly](http://docs.adobe.com/content/docs/en/aem/6-0/develop/sightly.html "Sightly") is the new HTML templating system introduced with Adobe Experience Manager 6.0. The AEM Brackets Extension provides a smoother development workflow for writing AEM components, offering several features like:
 
 * Sightly syntax-highlighting;
 * code-completion for Sightly expressions, `data-sly-*` block elements and Use-API Java objects;
 * bidirectional synchronisation.
 
 1. [Requirements](#requirements)
-2. [How to Install the AEM Sightly Brackets Extension](#how-to-install-the-aem-sightly-brackets-extension)
-3. [Working With the AEM Sightly Brackets Extension](#working-with-the-aem-sightly-brackets-extension)
+2. [How to Install the AEM Brackets Extension](#how-to-install-the-aem-sightly-brackets-extension)
+3. [Working With the AEM Brackets Extension](#working-with-the-aem-sightly-brackets-extension)
   1. [The content-package project](#the-content-package-project)
   2. [Synchronisation Settings](#synchronisation-settings)
 4. [Known Issues or Limitations](#known-issues-or-limitations)
@@ -19,16 +19,16 @@
 8. [Credits](#credits)
 
 ## Requirements
-AEM Sightly Brackets Extension supports Brackets versions greater or equal than sprint 38. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
+The AEM Brackets Extension supports Brackets versions greater or equal than sprint 45. You can download a new Brackets version from [brackets.io](http://brackets.io "Brackets - The Free, Open Source Code Editor for the Web").
 
-## How to Install the AEM Sightly Brackets Extension
+## How to Install the AEM Brackets Extension
 1. Open Brackets. In menu **File**, select **Extension Manager…**
-2. Enter `sightly` in the **search** bar and look for the `AEM Sightly Brackets Extension`.
+2. Enter `sightly`/`AEM` in the **search** bar and look for the `AEM Brackets Extension`.
   ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/install_extension.png)
 3. Click **Install**.
 4. Restart Brackets when asked.
 
-## Working With the AEM Sightly Brackets Extension
+## Working With the AEM Brackets Extension
 
 #### The content-package project
 After the extension has been installed, you can start developing AEM components by either opening a content-package folder from your file system with Brackets or by creating the structure for one from within the editor.
@@ -42,11 +42,12 @@ In order to synchronise your content to and from an AEM server you need to defin
 
 ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/sync_settings.png)
 
-The Synchronisation Settings allow you to define:
+The Synchronisation Settings allow you to configure:
 
 1. the server URL (e.g. http://localhost:4502)
-2. the username used for synchronising content
-3. the user's password
+2. if you want to accept self-signed certificates for HTTPS hosts
+3. the username used for synchronising content
+4. the user's password
 
 The settings will be saved in your project's root folder, in the .`brackets.json` file, e.g. `myproject/.brackets.json`. We don't recommend saving this file in your SCM system.
 
@@ -87,7 +88,7 @@ The AEM Sighly Brackets Extension provides two types of content synchronisation.
 
       ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/export_content_package.png)
 
-The AEM Sightly Brackets Extension adds a notification icon on the main toolbar, in the bottom right corner of the Brackets window. After a synchronisation operation is performed the notification icon's colour changes to indicate the synchronisation status:
+The AEM Brackets Extension adds a notification icon on the main toolbar, in the bottom right corner of the Brackets window. After a synchronisation operation is performed the notification icon's colour changes to indicate the synchronisation status:
 
 * green - all files have been synchronised successfully
 * yellow - some of the files were not synchronised successfully
@@ -100,15 +101,15 @@ Clicking on the notification icon will open the Synchronisation Status report di
 
 ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/sync_status_report.png)
 
-The AEM Sightly Brackets extension also supports [.vltignore](http://docs.adobe.com/docs/en/cq/aem-how-tos/development/how-to-build-aem-projects-using-apache-maven.html#Adding Paths to the Package Without Syncing Them) files for excluding content from synchronising to and from the repository.
+The AEM Brackets Extension also supports [.vltignore](http://docs.adobe.com/docs/en/cq/aem-how-tos/development/how-to-build-aem-projects-using-apache-maven.html#Adding Paths to the Package Without Syncing Them) files for excluding content from synchronising to and from the repository.
 
 ## Known Issues or Limitations
-* Currently the AEM Sightly Brackets Extension does not support working with embedded content packages.
+* Currently the AEM Brackets Extension does not support working with embedded content packages.
 * `filter-vlt.xml` files are not yet taken into consideration.
 * When synchronising a full content package only the `filter.xml` file from the `META-INF/vault` folder is used as the extension builds ad-hoc content packages that get installed and removed from your AEM instance; therefore your content package's definition is not altered but its content is updated.
 
 ## Sample Application
-A sample application built with Brackets and the AEM Sightly Brackets Extension is available at [https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc](https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc "Sightly TodoMVC Example").
+A sample application built with Brackets and the AEM Brackets Extension is available at [https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc](https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc "Sightly TodoMVC Example").
 
 ## Reporting Bugs
 Please report any issues you encounter using GitHub's issue tracker from [https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues).
@@ -116,7 +117,7 @@ Please report any issues you encounter using GitHub's issue tracker from [https:
 In order to help us investigate the reported issues, please include, at minimum, the following information:
 
 1. Brackets version (e.g. sprint 42)
-2. AEM Sightly Brackets Extension version (e.g. 0.0.4)
+2. AEM Brackets Extension version (e.g. 0.0.4)
 3. OS and architecture (e.g. Windows 8.1 x64, Mac OS X 10.9.4, Ubuntu 14.04 32-bit, etc.)
 4. a brief list of steps to reproduce the issue; in case there's a complex setup involved, please provide a testing content-package)
 5. the expected outcome
@@ -125,7 +126,7 @@ In order to help us investigate the reported issues, please include, at minimum,
 You can use the following Markdown template:
 ```markdown
 **Brackets version:** sprint 42  
-**AEM Sightly Brackets Extension:** 0.0.4  
+**AEM Brackets Extension:** 0.0.4  
 **OS and architecture:** Windows 8.1 x64  
 
 #### Steps to reproduce:
@@ -143,7 +144,7 @@ It actually doesn't...
 
 
 ## Development
-The AEM Sightly Brackets Extension is a Node.js module. The following steps need to be followed if you want to start hacking on new features:
+The AEM Brackets Extension is a Node.js module. The following steps need to be followed if you want to start hacking on new features:
 
 1. install [Node.js](http://nodejs.org/ "node.js") for your platform
 2. install [Apache Maven](http://maven.apache.org/ "Apache Maven") for your platform
