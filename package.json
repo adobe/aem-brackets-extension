@@ -2,9 +2,9 @@
     "name"           : "aem-sightly-brackets-extension",
     "title"          : "AEM Sightly Brackets Extension",
     "description"    : "The AEM Brackets Extension provides a smooth and easy development workflow for front-end developers to edit AEM components. Its main features are: automatic synchronisation of changed project files to your AEM instance; manual importing of content from the AEM instance to the project; Sightly syntax-highlighting and auto-completion; easy editing of associated client libraries (CSS, JavaScript).",
-    "version"        : "0.0.11-dev",
+    "version"        : "0.0.11",
     "engines"        : {
-        "brackets": ">=0.38.0"
+        "brackets": ">=0.45.0"
     },
     "author" : "Adobe Marketing Cloud (https://github.com/adobe-marketing-cloud)",
     "homepage" : "http://docs.adobe.com/docs/en/dev-tools/sightly-brackets.html",
