@@ -53,7 +53,7 @@ The settings will be saved in your project's root folder, in the .`brackets.json
 
 #### Synchronising Content
 
-The AEM Sighly Brackets Extension provides two types of content synchronisation.
+The AEM Sightly Brackets Extension provides two types of content synchronisation.
 
 1. **Automated synchronisation for HTML, JavaScript, CSS and .content.xml files**; provided that the remote path of the files you are editing is allowed to be synchronised by the filtering rules defined in `filter.xml`, these files will be synced to the AEM server on-save; for `.content.xml` files their parent folders will be synchronised.
     
