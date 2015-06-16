@@ -49,10 +49,15 @@ define({
     SYNC_STATUS                                      : 'Stare Sincronizare',
     SYNC_STATUS_TH_FILE                              : 'Fișier',
     SYNC_STATUS_TH_STATUS                            : 'Stare Sincronizare',
-    SYNC_STATUS_SYNCED                               : 'sincronizat',
+    SYNC_STATUS_TH_TIME                              : 'Timp',
+    SYNC_STATUS_IMPORTED                             : 'importat',
+    SYNC_STATUS_EXPORTED                             : 'exportat',
     SYNC_STATUS_IGNORED                              : 'ignorat de către configurarea filtrului',
     SYNC_STATUS_EXCLUDED                             : 'exclus de către configurarea filtrului',
     SYNC_STATUS_EXCLUDED_VLT                         : 'fișier vlt sau fișier exclus de către .vltignore',
-    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'șters - fișierul a fost șters pe server'
+    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'șters - fișierul a fost șters pe server',
+
+    // Synchronization panel
+    SYNC_PANEL_CLEAR                                 : 'Șterge rezultate'
 
 });

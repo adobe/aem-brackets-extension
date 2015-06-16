@@ -49,10 +49,15 @@ define({
     SYNC_STATUS                                      : 'Synchronization Status',
     SYNC_STATUS_TH_FILE                              : 'Entry',
     SYNC_STATUS_TH_STATUS                            : 'Synchronization Status',
-    SYNC_STATUS_SYNCED                               : 'synchronized',
+    SYNC_STATUS_TH_TIME                              : 'Time',
+    SYNC_STATUS_IMPORTED                             : 'imported',
+    SYNC_STATUS_EXPORTED                             : 'exported',
     SYNC_STATUS_IGNORED                              : 'ignored by the filter configuration',
     SYNC_STATUS_EXCLUDED                             : 'excluded by the filter configuration',
     SYNC_STATUS_EXCLUDED_VLT                         : 'vlt file or file excluded by .vltignore pattern',
-    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'removed - the file was deleted on the server'
+    SYNC_STATUS_DELETED_FROM_REMOTE                  : 'removed - the file was deleted on the server',
+
+    // Synchronization panel
+    SYNC_PANEL_CLEAR                                 : 'Clear results'
 
 });

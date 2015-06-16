@@ -21,8 +21,8 @@ define(function (require, exports, module) {
         SlyDomain               = new NodeDomain('sly', ExtensionUtils.getModulePath(module, 'node/SlyDomain')),
         Preferences             = require('sly/preferences/Preferences'),
         ProjectUtils            = require('sly/ProjectUtils'),
-        ToolBar               = require('sly/toolbar/ToolBar'),
-        SessionStorage          = require('sly/SessionStorage'),
+        ToolBar                 = require('sly/toolbar/ToolBar'),
+        Panel                   = require('sly/panel/Panel'),
         Strings                 = require('strings'),
         CMD_PUSH_REMOTE = 'sly-push-remote',
         CMD_PULL_REMOTE = 'sly-pull-remote',
@@ -66,7 +66,7 @@ define(function (require, exports, module) {
                                 ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_IN_PROGRESS);
                                 return SlyDomain.exec('pushVault', pathToSync, filterFile).then(
                                     function (fileSyncStatus) {
-                                        _calculateSyncStatus(fileSyncStatus);
+                                        _calculateSyncStatus(fileSyncStatus, false);
                                     },
                                     function (err) {
                                         ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
@@ -105,7 +105,7 @@ define(function (require, exports, module) {
                                 ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_IN_PROGRESS);
                                 return SlyDomain.exec('pullVault', pathToSync, filterFile).then(
                                     function (fileSyncStatus) {
-                                        _calculateSyncStatus(fileSyncStatus);
+                                        _calculateSyncStatus(fileSyncStatus, true);
                                     },
                                     function (err) {
                                         ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
@@ -145,17 +145,20 @@ define(function (require, exports, module) {
             });
     }
 
-    function _calculateSyncStatus(fileSyncStatus) {
+    function _calculateSyncStatus(fileSyncStatus, imported) {
         if (fileSyncStatus instanceof Array) {
             var syncedFiles = 0;
-            var syncStatus = [];
             for (var i = 0; i < fileSyncStatus.length; i++) {
                 var result = fileSyncStatus[i].result;
                 var status = '';
                 switch (result) {
                     case 1:
                         syncedFiles++;
-                        status = Strings.SYNC_STATUS_SYNCED;
+                        if (imported) {
+                            status = Strings.SYNC_STATUS_IMPORTED;
+                        } else {
+                            status = Strings.SYNC_STATUS_EXPORTED;
+                        }
                         break;
                     case 0:
                         status = Strings.SYNC_STATUS_IGNORED;
@@ -171,10 +174,9 @@ define(function (require, exports, module) {
                         status = Strings.SYNC_STATUS_DELETED_FROM_REMOTE;
                         break;
                 }
-                syncStatus.push({path: fileSyncStatus[i].path, status: status});
                 console.log('Path ' + fileSyncStatus[i].path + ' was ' + status);
+                Panel.append({path: fileSyncStatus[i].path, status: status, time: new Date().toLocaleString()});
             }
-            SessionStorage.put('syncStatus', syncStatus);
             if (syncedFiles === 0) {
                 ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE);
             } else if (syncedFiles === fileSyncStatus.length) {
