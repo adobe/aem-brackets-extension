@@ -36,6 +36,7 @@ define(function (require, exports, module) {
     function updateStatusIndicator(show, state, title, errorMessage) {
         if (errorMessage !== undefined) {
             Panel.append({error: errorMessage, time: new Date().toLocaleString()});
+            Panel.toggle(true);
         }
         if (show === true) {
             if (state) {

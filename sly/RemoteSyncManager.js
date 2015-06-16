@@ -15,8 +15,6 @@ define(function (require, exports, module) {
         CommandManager          = brackets.getModule('command/CommandManager'),
         ProjectManager          = brackets.getModule('project/ProjectManager'),
         Menus                   = brackets.getModule('command/Menus'),
-        Dialogs                 = brackets.getModule('widgets/Dialogs'),
-        DefaultDialogs          = brackets.getModule('widgets/DefaultDialogs'),
         NativeApp               = brackets.getModule('utils/NativeApp'),
         SlyDomain               = new NodeDomain('sly', ExtensionUtils.getModulePath(module, 'node/SlyDomain')),
         Preferences             = require('sly/preferences/Preferences'),
@@ -70,11 +68,6 @@ define(function (require, exports, module) {
                                     },
                                     function (err) {
                                         ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
-                                        Dialogs.showModalDialog(
-                                            DefaultDialogs.DIALOG_ID_ERROR,
-                                            'Synchronisation error',
-                                            err
-                                        );
                                     }
                                 );
                             }
@@ -109,11 +102,6 @@ define(function (require, exports, module) {
                                     },
                                     function (err) {
                                         ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
-                                        Dialogs.showModalDialog(
-                                            DefaultDialogs.DIALOG_ID_ERROR,
-                                            'Synchronisation error',
-                                            err
-                                        );
                                     }
                                 );
                             }
