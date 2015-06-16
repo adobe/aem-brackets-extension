@@ -21,6 +21,7 @@ define({
     // -- contextual menus
     CONTEXTUAL_PULL_REMOTE                           : 'Import from Server',
     CONTEXTUAL_PUSH_REMOTE                           : 'Export to Server',
+    CONTEXTUAL_OPEN_REMOTE                           : 'Open on Server',
 
     // Project Settings dialogue
     PROJECT_SETTINGS                                 : 'Project Settings',

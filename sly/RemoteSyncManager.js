@@ -17,6 +17,7 @@ define(function (require, exports, module) {
         Menus                   = brackets.getModule('command/Menus'),
         Dialogs                 = brackets.getModule('widgets/Dialogs'),
         DefaultDialogs          = brackets.getModule('widgets/DefaultDialogs'),
+        NativeApp               = brackets.getModule('utils/NativeApp'),
         SlyDomain               = new NodeDomain('sly', ExtensionUtils.getModulePath(module, 'node/SlyDomain')),
         Preferences             = require('sly/preferences/Preferences'),
         ProjectUtils            = require('sly/ProjectUtils'),
@@ -25,6 +26,7 @@ define(function (require, exports, module) {
         Strings                 = require('strings'),
         CMD_PUSH_REMOTE = 'sly-push-remote',
         CMD_PULL_REMOTE = 'sly-pull-remote',
+        CMD_OPEN_REMOTE = 'sly-open-remote',
         neighbours;
 
     function _uploadSlingDependencies() {
@@ -45,7 +47,7 @@ define(function (require, exports, module) {
             });
         }
     }
-    
+
     function _handleSyncToRemote(path) {
         var cmd      = Preferences.get('pushCommand'),
             selected = ProjectManager.getSelectedItem(),
@@ -125,6 +127,24 @@ define(function (require, exports, module) {
         }
     }
 
+    function _handleOpenRemote(path) {
+        var selected = ProjectManager.getSelectedItem(),
+            pathToOpen;
+        if (selected === null && path === undefined) {
+            return;
+        } else {
+            pathToOpen = path || selected.fullPath;
+        }
+        ProjectUtils.getJcrRoot().then(
+            function (root) {
+                pathToOpen = pathToOpen.replace(root, '');              // remove path up to JCR root, keep starting slash
+                pathToOpen = pathToOpen.replace(/\.content\.xml$/, ''); // get parent instead of .content.xml
+                pathToOpen = pathToOpen.replace(/\/*$/, '.html');       // replace trailing slashes with .html
+                var url = Preferences.getRemote().replace(/\/*$/,'') + '/' + pathToOpen.replace(/\\/, '');
+                NativeApp.openURLInDefaultBrowser(url);
+            });
+    }
+
     function _calculateSyncStatus(fileSyncStatus) {
         if (fileSyncStatus instanceof Array) {
             var syncedFiles = 0;
@@ -168,6 +188,7 @@ define(function (require, exports, module) {
     function _toggleSyncContextMenu(toggle) {
         CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
         CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
+        CommandManager.get(CMD_OPEN_REMOTE).setEnabled(toggle);
     }
 
     /* return neighbours of a given doc in the hierarchy */
@@ -235,10 +256,12 @@ define(function (require, exports, module) {
         _uploadSlingDependencies();
         CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, _handleSyncFromRemote);
         CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, _handleSyncToRemote);
+        CommandManager.register(Strings.CONTEXTUAL_OPEN_REMOTE, CMD_OPEN_REMOTE, _handleOpenRemote);
         var project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
         project_cmenu.addMenuDivider();
         project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
         project_cmenu.addMenuItem(CMD_PULL_REMOTE);
+        project_cmenu.addMenuItem(CMD_OPEN_REMOTE);
 
         $(project_cmenu).on('beforeContextMenuOpen', function () {
             ProjectUtils.getJcrRoot().then(

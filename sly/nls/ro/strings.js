@@ -21,6 +21,7 @@ define({
     // -- contextual menus
     CONTEXTUAL_PULL_REMOTE                           : 'Importați de pe Server',
     CONTEXTUAL_PUSH_REMOTE                           : 'Exportați pe Server',
+    CONTEXTUAL_OPEN_REMOTE                           : 'Deschideți pe Server',
 
     // Project Settings dialogue
     PROJECT_SETTINGS                                 : 'Setările Proiectului',
