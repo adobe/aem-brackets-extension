@@ -1,0 +1,27 @@
+{{!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~ Copyright (c) 2015 Adobe Systems Incorporated. All rights reserved.
+~
+~ Licensed under the Apache License 2.0.
+~ http://www.apache.org/licenses/LICENSE-2.0
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--}}
+<div id="sly-sync-aem" class="bottom-panel vert-resizable top-resizer no-focus">
+    <div class="toolbar simple-toolbar-layout mainToolbar">
+        <div class="btn-group">
+            <button title="{{Strings.SYNC_PANEL_CLEAR}}" class="btn small clear">{{Strings.SYNC_PANEL_CLEAR}}</button>
+        </div>
+        <a href="#" class="close">&times;</a>
+    </div>
+    <h1 class="dialog-title">{{Strings.SYNC_STATUS}}</h1>
+    <div class="sly-sync-results table-container resizable-content">
+        <table class="bottom-panel-table table table-striped table-condensed row-highlight">
+            <thead>
+                <tr class="tablehead">
+                    <th>{{Strings.SYNC_STATUS_TH_FILE}}</th>
+                    <th>{{Strings.SYNC_STATUS_TH_STATUS}}</th>
+                    <th>{{Strings.SYNC_STATUS_TH_TIME}}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

@@ -9,11 +9,11 @@ define(function (require, exports, module) {
     'use strict';
 
     var Dialogs                       = brackets.getModule('widgets/Dialogs'),
+        WorkspaceManager              = brackets.getModule('view/WorkspaceManager'),
         Strings                       = require('strings'),
-        SessionStorage                = require('sly/SessionStorage'),
-        ToolBarIndicatorTemplate    = require('text!./toolbar-aem-indicator.html'),
-        IndicatorReportTemplate = require('text!./toolbar-aem-sync-status.html'),
-        AEM_INDICATOR = 'sly-status-aem',
+        Panel                         = require('sly/panel/Panel'),
+        ToolBarIndicatorTemplate      = require('text!./toolbar-aem-indicator.html'),
+        AEM_INDICATOR                 = 'sly-status-aem',
         DISABLED_TOOLBAR_BUTTON_CLASS = 'disabled-toolbar-button',
         states = {},
         $slySyncStatus;
@@ -34,6 +34,10 @@ define(function (require, exports, module) {
     }
 
     function updateStatusIndicator(show, state, title, errorMessage) {
+        if (errorMessage !== undefined) {
+            Panel.append({error: errorMessage, time: new Date().toLocaleString()});
+            Panel.toggle(true);
+        }
         if (show === true) {
             if (state) {
                 var templateVars = {
@@ -43,16 +47,10 @@ define(function (require, exports, module) {
                 $slySyncStatus.replaceWith(template);
                 $slySyncStatus = $('#' + AEM_INDICATOR);
                 $slySyncStatus.addClass(state.style || '');
-                $slySyncStatus.click(function (e) {
-                    var templateVars = {
-                        Strings: Strings,
-                        syncStatus: SessionStorage.get('syncStatus'),
-                        displaySyncStatus: SessionStorage.get('syncStatus') !== null,
-                        errorMessage: errorMessage
-                    };
-                    Dialogs.showModalDialogUsingTemplate(Mustache.render(IndicatorReportTemplate, templateVars), true);
-                });
                 $slySyncStatus.removeClass(DISABLED_TOOLBAR_BUTTON_CLASS);
+                $slySyncStatus.click(function () {
+                    Panel.toggle();
+                });
             }
         } else {
             $slySyncStatus.addClass(DISABLED_TOOLBAR_BUTTON_CLASS);
