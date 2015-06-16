@@ -26,7 +26,7 @@
     }
 
     function setRemote(remote, remoteUser, remotePassword, acceptSelfSignedCertificates) {
-        _remote = remote;
+        _remote = remote.replace(new RegExp('/*$'), '');
         _remoteUser = remoteUser;
         _remotePassword = remotePassword;
         _acceptSelfSignedCertificates = acceptSelfSignedCertificates || false;
