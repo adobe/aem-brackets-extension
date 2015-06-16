@@ -15,8 +15,8 @@ define({
     // Menus
     // -- top level
     MENU_PROJECT_SETTINGS                            : 'Project Settings...',
-    MENU_EXPORT_CONTENT_PACKAGE                      : 'Export Content Package',
-    MENU_IMPORT_CONTENT_PACKAGE                      : 'Import Content Package',
+    MENU_EXPORT_CONTENT_PACKAGE                      : 'Export Content Package to Server',
+    MENU_IMPORT_CONTENT_PACKAGE                      : 'Import Content Package from Server',
 
     // -- contextual menus
     CONTEXTUAL_PULL_REMOTE                           : 'Import from Server',

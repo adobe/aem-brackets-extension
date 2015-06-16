@@ -15,8 +15,8 @@ define({
     // Menus
     // -- top level
     MENU_PROJECT_SETTINGS                            : 'Setările Proiectului...',
-    MENU_EXPORT_CONTENT_PACKAGE                      : 'Exportați Content Package-ul',
-    MENU_IMPORT_CONTENT_PACKAGE                      : 'Importați Content Package-ul',
+    MENU_EXPORT_CONTENT_PACKAGE                      : 'Exportați Content Package-ul pe Server',
+    MENU_IMPORT_CONTENT_PACKAGE                      : 'Importați Content Package-ul de pe Server',
 
     // -- contextual menus
     CONTEXTUAL_PULL_REMOTE                           : 'Importați de pe Server',
