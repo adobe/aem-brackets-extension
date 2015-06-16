@@ -137,8 +137,11 @@ define(function (require, exports, module) {
         }
         ProjectUtils.getJcrRoot().then(
             function (root) {
-                var trailSlash = new RegExp('/$');
-                var url = Preferences.getRemote() + pathToOpen.replace(root.replace(trailSlash, ''), '').replace(trailSlash, ".html");
+                pathToOpen = pathToOpen.replace(root, '');              // remove path up to JCR root, keep starting slash
+                pathToOpen = pathToOpen.replace(/\.content\.xml$/, ''); // get parent instead of .content.xml
+                pathToOpen = pathToOpen.replace(/\/*$/, '.html');       // replace trailing slashes with .html
+                var url = Preferences.getRemote().replace(/\/*$/,'') +
+                        '/' + pathToOpen.replace(/\\/, '');
                 NativeApp.openURLInDefaultBrowser(url);
             });
     }
