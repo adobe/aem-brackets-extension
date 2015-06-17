@@ -270,6 +270,9 @@ define(function (require, exports, module) {
         });
 
         FileSystem.on('change', function (event, entry, addedEntries, removedEntries) {
+            if (!Preferences.getAutoSync()) {
+                return;
+            }
             var projectPath = ProjectManager.getProjectRoot() ? ProjectManager.getProjectRoot().fullPath : null;
             if (entry !== null && entry.fullPath.indexOf(projectPath) === 0) {
                 if (entry.isFile && entry.name === '.content.xml') {

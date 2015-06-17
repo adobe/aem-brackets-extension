@@ -34,6 +34,11 @@
                             <td><input type="password" value="{{remoteUserPassword}}" class="password" name="remoteUserPassword"
                                        id="remoteUserPassword"/></td>
                         </tr>
+                        <tr>
+                            <td class="settings-parameter">{{Strings.PROJECT_SETTING_AUTO_SYNC}}:</td>
+                            <td><input type="checkbox" name="autoSync" id="autoSync"
+                                       {{#autoSync}}checked{{/autoSync}} /></td>
+                        </tr>
                     </table>
                 </fieldset>
             </form>
