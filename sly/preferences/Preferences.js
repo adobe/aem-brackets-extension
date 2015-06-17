@@ -20,6 +20,9 @@ define(function (require, exports, module) {
         ProjectSettingsDialogTemplate = require('text!./project-settings-dialog.html'),
         Strings                       = require('strings'),
         slyPreferences                = PreferenceManager.getExtensionPrefs('sly'),
+        DEFAULT_SERVER_URL            = 'http://localhost:4502',
+        DEFAULT_USER                  = 'admin',
+        DEFAULT_PASSWORD              = 'admin',
         validators = {},
         scopes = {};
 
@@ -75,7 +78,7 @@ define(function (require, exports, module) {
     }
 
     function getRemote() {
-        return get('serverUrl');
+        return get('serverUrl') || DEFAULT_SERVER_URL;
     }
 
     function acceptSelfSignedCertificates() {
@@ -83,11 +86,11 @@ define(function (require, exports, module) {
     }
 
     function getRemoteUser() {
-        return get('remoteUser');
+        return get('remoteUser') || DEFAULT_USER;
     }
 
     function getRemotePassword() {
-        return get('remoteUserPassword');
+        return get('remoteUserPassword') || DEFAULT_PASSWORD;
     }
 
     function getSyncedLanguages() {
@@ -121,12 +124,12 @@ define(function (require, exports, module) {
                     var entry = formData[i];
                     if (entry.name === 'acceptSelfSignedCertificates' && entry.value === 'on') {
                         formData[i] = {name: 'acceptSelfSignedCertificates', value: true};
-                        found = true;
-                    }
+                            found = true;
+                        }
                 }
-                if (!found) {
+                    if (!found) {
                     formData.push({name: 'acceptSelfSignedCertificates', value: false});
-                }
+                    }
                 var validationResult = _validatePreferencesForm(formData);
                 if (validationResult === '') {
                     formData.forEach(function(entry) {
