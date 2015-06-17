@@ -21,7 +21,8 @@ define(function (require, exports, module) {
         Strings                       = require('strings'),
         slyPreferences                = PreferenceManager.getExtensionPrefs('sly'),
         validators = {},
-        scopes = {};
+        scopes = {},
+        DEFAULT_SERVER_URL, DEFAULT_USER, DEFAULT_PASSWORD;
 
     validators.serverUrl = function(url) {
         if (url === '') {
@@ -75,7 +76,7 @@ define(function (require, exports, module) {
     }
 
     function getRemote() {
-        return get('serverUrl');
+        return get('serverUrl') || DEFAULT_SERVER_URL;
     }
 
     function acceptSelfSignedCertificates() {
@@ -83,11 +84,11 @@ define(function (require, exports, module) {
     }
 
     function getRemoteUser() {
-        return get('remoteUser');
+        return get('remoteUser') || DEFAULT_USER;
     }
 
     function getRemotePassword() {
-        return get('remoteUserPassword');
+        return get('remoteUserPassword') || DEFAULT_PASSWORD;
     }
 
     function getSyncedLanguages() {
@@ -95,6 +96,9 @@ define(function (require, exports, module) {
     }
 
     function load(SLYDictionary) {
+        DEFAULT_SERVER_URL = SLYDictionary.constants.DEFAULT_SERVER_URL;
+        DEFAULT_USER = SLYDictionary.constants.DEFAULT_USER;
+        DEFAULT_PASSWORD = SLYDictionary.constants.DEFAULT_PASSWORD;
         SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword(), acceptSelfSignedCertificates());
     }
 
@@ -121,12 +125,12 @@ define(function (require, exports, module) {
                     var entry = formData[i];
                     if (entry.name === 'acceptSelfSignedCertificates' && entry.value === 'on') {
                         formData[i] = {name: 'acceptSelfSignedCertificates', value: true};
-                        found = true;
-                    }
+                            found = true;
+                        }
                 }
-                if (!found) {
+                    if (!found) {
                     formData.push({name: 'acceptSelfSignedCertificates', value: false});
-                }
+                    }
                 var validationResult = _validatePreferencesForm(formData);
                 if (validationResult === '') {
                     formData.forEach(function(entry) {
