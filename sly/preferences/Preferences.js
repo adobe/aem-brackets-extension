@@ -23,6 +23,7 @@ define(function (require, exports, module) {
         DEFAULT_SERVER_URL            = 'http://localhost:4502',
         DEFAULT_USER                  = 'admin',
         DEFAULT_PASSWORD              = 'admin',
+        DEFAULT_AUTO_SYNC             = true,
         validators = {},
         scopes = {};
 
@@ -62,6 +63,7 @@ define(function (require, exports, module) {
     scopes.remoteUser = 'project';
     scopes.remoteUserPassword = 'project';
     scopes.acceptSelfSignedCertificates = 'project';
+    scopes.autoSync = 'project';
     scopes.syncedLanguages = 'user';
 
 
@@ -97,6 +99,14 @@ define(function (require, exports, module) {
         return get('syncedLanguages');
     }
 
+    function getAutoSync() {
+        var autoSync = get('autoSync');
+        if (autoSync === undefined) {
+            return DEFAULT_AUTO_SYNC;
+        }
+        return autoSync;
+    }
+
     function load(SLYDictionary) {
         SlyDomain.exec('setRemote', getRemote(), getRemoteUser(), getRemotePassword(), acceptSelfSignedCertificates());
     }
@@ -110,6 +120,7 @@ define(function (require, exports, module) {
             serverUrl : getRemote(),
             remoteUser : getRemoteUser(),
             remoteUserPassword : getRemotePassword(),
+            autoSync: getAutoSync(),
             acceptSelfSignedCertificates: acceptSelfSignedCertificates(),
             errorMessage : errorMessage
         };
@@ -118,18 +129,18 @@ define(function (require, exports, module) {
         dialog.done(function(id) {
             if (id === Dialogs.DIALOG_BTN_OK) {
                 formData = dialog.getElement().find('form').serializeArray();
-                var i,
-                    found = false;
-                for (i = 0; i < formData.length; i++) {
-                    var entry = formData[i];
-                    if (entry.name === 'acceptSelfSignedCertificates' && entry.value === 'on') {
-                        formData[i] = {name: 'acceptSelfSignedCertificates', value: true};
+                ['acceptSelfSignedCertificates', 'autoSync'].forEach(function (box) {
+                    var found = false;
+                    formData.forEach(function (input) {
+                        if (input.name === box && input.value === 'on') {
+                            input.value = true;
                             found = true;
                         }
-                }
+                    });
                     if (!found) {
-                    formData.push({name: 'acceptSelfSignedCertificates', value: false});
+                        formData.push({name: box, value: false});
                     }
+                });
                 var validationResult = _validatePreferencesForm(formData);
                 if (validationResult === '') {
                     formData.forEach(function(entry) {
@@ -185,6 +196,7 @@ define(function (require, exports, module) {
     exports.getSyncedLanguages = getSyncedLanguages;
     exports.getRemoteUser = getRemoteUser;
     exports.getRemotePassword = getRemotePassword;
+    exports.getAutoSync = getAutoSync;
     exports.acceptSelfSignedCertificates = acceptSelfSignedCertificates;
     exports.openProjectPreferences = openProjectPreferences;
 });

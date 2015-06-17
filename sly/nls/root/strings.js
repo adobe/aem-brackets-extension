@@ -28,6 +28,7 @@ define({
     PROJECT_SETTING_SERVER_URL                       : 'Server URL',
     PROJECT_SETTING_REMOTE_USER                      : 'Username',
     PROJECT_SETTING_REMOTE_USER_PASSWORD             : 'Password',
+    PROJECT_SETTING_AUTO_SYNC                        : 'Automatic export of changes to server',
     PROJECT_SETTING_SERVER_URL_HINT                  : 'http://localhost:4502',
     PROJECT_SETTING_REMOTE_USER_HINT                 : 'admin',
     PROJECT_SYNCHRONISATION_SETTINGS                 : 'Synchronization Settings',

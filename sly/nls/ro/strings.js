@@ -28,6 +28,7 @@ define({
     PROJECT_SETTING_SERVER_URL                       : 'URL Server',
     PROJECT_SETTING_REMOTE_USER                      : 'Utilizator',
     PROJECT_SETTING_REMOTE_USER_PASSWORD             : 'Parolă',
+    PROJECT_SETTING_AUTO_SYNC                        : 'Exportare automată a modificărilor pe server',
     PROJECT_SETTING_SERVER_URL_HINT                  : 'http://localhost:4502',
     PROJECT_SETTING_REMOTE_USER_HINT                 : 'admin',
     PROJECT_SYNCHRONISATION_SETTINGS                 : 'Setări de Sincronizare',
