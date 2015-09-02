@@ -1,28 +1,25 @@
 # AEM Brackets Extension
 ![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-sightly-brackets-extension/screenshots/brackets.png)
 
-This extension provides a smooth and easy way for front-end web developers to edit the designs of AEM components and client libraries by leveraging the [Extract](http://www.adobe.com/creativecloud/extract.html) features. This gives access from within the code editor to design information of a PSD comp, like assets, colors, fonts and mesurements. This extension provides in particular an automatic synchronisation to the AEM development instance, which makes it particularily easy for developers to get started on AEM projects.
+This extension provides a smooth workflow to edit AEM components and client libraries, and leverages the power of the [Brackets](http://brackets.io) code editor, which gives access from within the code editor to Photoshop files and layers. The easy synchronization provided by the AEM Brackets Extension (no Maven or File Vault required) increases developer efficiency and also helps front-end developers with limited AEM knowledge to participate on projects. This extension also provides some [Sightly](http://docs.adobe.com/content/docs/en/aem/6-1/develop/sightly.html) support, a template language that takes away the complexity of JSP to make component development easier and more secure.
 
-## Main features
-* Automatic synchronization ton AEM of changed files.
-* Manual synchronization back from AEM of selected file or folder.
-* [Sightly](https://docs.adobe.com/docs/en/aem/6-0/develop/sightly.html) syntax-highlighting and auto-completion
+## Documentation
+Please refer to the [documentation page](http://docs.adobe.com/content/docs/en/dev-tools/aem-brackets.html) for instructions on how to install the extension, as well as detailed information about the features.
 
-## Installation and usage
-Please refer to the [documentation page](http://docs.adobe.com/docs/en/dev-tools/sightly-brackets.html).
+## Get Started
+If you don't have of your own a project with a content-package to try out, you can try out the the [Sightly TodoMVC Example](aem-sightly-sample-todomvc) sample application that was built with the AEM Brackets Extension. Download the ZIP from GitHub, extract the files locally, open the `jcr_root` folder in Brackets, setup the Project Settings, and upload the whole package to your AEM development instance by doing an Export Content Package.
+
+After these steps, you should be able to access the `/content/todo.html` URL on your AEM development instance and you can start doing modifications to the code in Brackets and see how, after doing a refresh in the web browser, the changes were immediately synchronized to the AEM server.
 
 ## Known Issues or Limitations
 * Embedded content packages are not supported.
 * `filter-vlt.xml` files are not yet taken into consideration.
 * When synchronising a full content package, only the `filter.xml` file from the `META-INF/vault` folder is used as the extension builds ad-hoc content packages that get installed and removed from your AEM instance; therefore your content package's definition is not altered but its content is updated.
 
-## Sample Application
-A sample application built with Brackets and the AEM Brackets Extension is available at [https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc](https://github.com/Adobe-Marketing-Cloud/aem-sightly-sample-todomvc "Sightly TodoMVC Example").
-
 ## Reporting Bugs
-Please report any issues you encounter using GitHub's issue tracker from [https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues).
+Please report any issues you encounter using GitHub's [issue tracker from](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues).
 
-In order to help us investigate the reported issues, please include, at minimum, the following information:
+In order to help us investigate the reported issues, please include at minimum, the following information:
 
 1. Brackets version (e.g. sprint 42)
 2. AEM Brackets Extension version (e.g. 0.0.4)
