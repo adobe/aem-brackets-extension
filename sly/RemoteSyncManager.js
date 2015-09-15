@@ -21,6 +21,7 @@ define(function (require, exports, module) {
         ProjectUtils            = require('sly/ProjectUtils'),
         ToolBar                 = require('sly/toolbar/ToolBar'),
         Panel                   = require('sly/panel/Panel'),
+        fileMTimeCache          = require('sly/FileMTimeCache'),
         Strings                 = require('strings'),
         CMD_PUSH_REMOTE = 'sly-push-remote',
         CMD_PULL_REMOTE = 'sly-pull-remote',
@@ -147,6 +148,7 @@ define(function (require, exports, module) {
                         } else {
                             status = Strings.SYNC_STATUS_EXPORTED;
                         }
+                        fileMTimeCache.put(fileSyncStatus[i].path, new Date());
                         break;
                     case 0:
                         status = Strings.SYNC_STATUS_IGNORED;
@@ -269,21 +271,83 @@ define(function (require, exports, module) {
             ).done();
         });
 
-        FileSystem.on('change', function (event, entry, addedEntries, removedEntries) {
-            if (!Preferences.getAutoSync()) {
-                return;
-            }
-            var projectPath = ProjectManager.getProjectRoot() ? ProjectManager.getProjectRoot().fullPath : null;
-            if (entry !== null && entry.fullPath.indexOf(projectPath) === 0) {
-                if (entry.isFile && entry.name === '.content.xml') {
-                    _handleSyncToRemote(entry.parentPath);
-                } else {
-                    _handleSyncToRemote(entry.fullPath);
-                }
-            }
-        });
+        FileSystem.on('change', _handleFileSystemChange);
 
     }
+
+    function _handleFileSystemChange(event, mainEntry, addedEntries, removedEntries) {
+        if (!Preferences.getAutoSync()) {
+            return;
+        }
+        ProjectUtils.getJcrRoot().then(
+            function (jcrRoot) {
+                if (mainEntry !== null && mainEntry.fullPath.indexOf(jcrRoot) === 0) {
+                    console.log("Detected change in JCR root", mainEntry.fullPath);
+                    var filesModified = false;
+                    filesModified = _checkAddedEntries(addedEntries, jcrRoot) ||
+                            _checkRemovedEntries(removedEntries, jcrRoot);
+                    mainEntry.visit(function (subEntry) {
+                        if (filesModified) {
+                            return false; // already have one change, stop stat-ing files
+                        }
+                        if (subEntry.isDirectory) {
+                            return true; // visit subfiles
+                        }
+                        var relPath = subEntry.fullPath.replace(jcrRoot, '/');
+                        subEntry.stat(function (error, stats) {
+                            var lastImported = fileMTimeCache.get(relPath);
+                            if (!lastImported || lastImported < stats.mtime) {
+                                console.log(relPath + " is changed since last import/export");
+                                filesModified = true;
+                            }
+                        });
+                        return true; // continue visiting
+                    }, {}, function (error) {
+                        if (error === null) {
+                            if (!filesModified) {
+                                console.log("No files changed since last import. Nothing to do here!");
+                                return;
+                            }
+                            if (mainEntry.isFile && mainEntry.name === '.content.xml') {
+                                _handleSyncToRemote(mainEntry.parentPath);
+                            } else {
+                                _handleSyncToRemote(mainEntry.fullPath);
+                            }
+                        } else {
+                            console.error(error);
+                        }
+                    });
+                }
+            }
+        ).done();
+    }
+
+    function _checkAddedEntries(addedEntries, jcrRoot) {
+        if (addedEntries && addedEntries.length > 0) {
+            for (var i = 0; i < addedEntries.length; i++) {
+                var relPath = addedEntries[i].fullPath.replace(jcrRoot, '/');
+                if (!fileMTimeCache.get(relPath)) {
+                    console.log("File added since last import/export", relPath);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function _checkRemovedEntries(removedEntries, jcrRoot) {
+        if (removedEntries && removedEntries.length > 0) {
+            for (var i = 0; i < removedEntries.length; i++) {
+                var relPath = removedEntries[i].fullPath.replace(jcrRoot, '/');
+                if (fileMTimeCache.get(relPath)) {
+                    console.log("File removed since last import/export", relPath);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     exports.load = load;
     exports.findNeighbours = findNeighbours;
     exports.importContentPackage = importContentPackage;
