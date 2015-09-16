@@ -14,7 +14,7 @@ define(function (require, exports, module) {
     /**
      * Retrieves the absolute path to the <code>jcr_root</code> folder from the opened content-package project.
      *
-     * @returns {promise|String} a promise resolved with the absolute path to the <code>jcr_root</code> folder of the project
+     * @returns {promise|String} a promise resolved with the absolute path to the <code>jcr_root</code> folder of the project or a blank string if there is no jcr_root
      */
     function getJcrRoot() {
         var deferred = $.Deferred();
@@ -27,6 +27,7 @@ define(function (require, exports, module) {
                         break;
                     }
                 }
+                deferred.resolve('');
             },
             function (err) {
                 deferred.reject(err);

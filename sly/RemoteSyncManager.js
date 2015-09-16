@@ -177,12 +177,6 @@ define(function (require, exports, module) {
         }
     }
 
-    function _toggleSyncContextMenu(toggle) {
-        CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
-        CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
-        CommandManager.get(CMD_OPEN_REMOTE).setEnabled(toggle);
-    }
-
     /* return neighbours of a given doc in the hierarchy */
     function findNeighbours(doc) {
         var dfd = $.Deferred();
@@ -249,23 +243,44 @@ define(function (require, exports, module) {
         CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, _handleSyncFromRemote);
         CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, _handleSyncToRemote);
         CommandManager.register(Strings.CONTEXTUAL_OPEN_REMOTE, CMD_OPEN_REMOTE, _handleOpenRemote);
-        var project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
-        project_cmenu.addMenuDivider();
-        project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
-        project_cmenu.addMenuItem(CMD_PULL_REMOTE);
-        project_cmenu.addMenuItem(CMD_OPEN_REMOTE);
+        
+        var contextMenuEntriesState = false,
+             dividerId = null,
+             project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
+
+        function toggleMenuEntries(state) {
+            if (state === contextMenuEntriesState) {
+                return;
+            }
+            if (state) {
+                dividerId = project_cmenu.addMenuDivider();
+                project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
+                project_cmenu.addMenuItem(CMD_PULL_REMOTE);
+                project_cmenu.addMenuItem(CMD_OPEN_REMOTE);
+            } else {
+                project_cmenu.removeMenuDivider(dividerId.id);
+                project_cmenu.removeMenuItem(CMD_PUSH_REMOTE);
+                project_cmenu.removeMenuItem(CMD_PULL_REMOTE);
+                project_cmenu.removeMenuItem(CMD_OPEN_REMOTE);
+            }
+            contextMenuEntriesState = state;
+        }
 
         $(project_cmenu).on('beforeContextMenuOpen', function () {
             ProjectUtils.getJcrRoot().then(
                 function (root) {
-                    var selected = ProjectManager.getSelectedItem();
-                    if (!selected) {
-                        _toggleSyncContextMenu(false);
-                    }
-                    if (selected.fullPath.indexOf(root) === 0) {
-                        _toggleSyncContextMenu(true);
+                    if (root === '') {
+                        toggleMenuEntries(false);
                     } else {
-                        _toggleSyncContextMenu(false);
+                        var selected = ProjectManager.getSelectedItem();
+                        if (!selected) {
+                            toggleMenuEntries(false);
+                        }
+                        if (selected.fullPath.indexOf(root) === 0) {
+                            toggleMenuEntries(true);
+                        } else {
+                            toggleMenuEntries(false);
+                        }
                     }
                 }
             ).done();
