@@ -45,6 +45,8 @@
                 if (err) {
                     if (err.code === 'ECONNREFUSED') {
                         callback('Connection to server ' + _remote + ' was refused.');
+                    } else {
+                        callback('Error posting to ' + _remote + path + '. Code:' + err.code);
                     }
                 }
                 if (httpResponse) {

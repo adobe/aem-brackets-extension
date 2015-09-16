@@ -38,11 +38,15 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
-                    var response = JSON.parse(body);
-                    if (response.success === true) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject(new Error(response.msg));
+                    try {
+                        var response = JSON.parse(body);
+                        if (response.success === true) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(new Error(response.msg));
+                        }
+                    } catch (e) {
+                        deferred.reject(new Error('Error uploading package ' + packageFilePath + ': ' + e));
                     }
                 }
             }
@@ -71,11 +75,15 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             _createRequestOptions(user, password, acceptSelfSigned),
             function (err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
-                    var response = JSON.parse(body);
-                    if (response.success === true) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject(new Error(response.msg));
+                    try {
+                        var response = JSON.parse(body);
+                        if (response.success === true) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(new Error(response.msg));
+                        }
+                    } catch (e) {
+                        deferred.reject(new Error('Error installing package ' + packageName + ': ' + e));
                     }
                 }
             }
@@ -100,11 +108,15 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
-                    var response = JSON.parse(body);
-                    if (response.success === true) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject(new Error(response.msg));
+                    try {
+                        var response = JSON.parse(body);
+                        if (response.success === true) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(new Error(response.msg));
+                        }
+                    } catch (e) {
+                        deferred.reject(new Error('Error building package' + packageName + ': ' + e));
                     }
                 }
             }
@@ -129,11 +141,15 @@ node:true, eqeqeq:true, strict:true, undef:true, bitwise:true, immed:true, maxle
             _createRequestOptions(user, password, acceptSelfSigned),
             function(err, httpResponse, body) {
                 if (!_errorDetected(err, httpResponse, serverURL, 200, deferred)) {
-                    var response = JSON.parse(body);
-                    if (response.success === true) {
-                        deferred.resolve();
-                    } else {
-                        deferred.reject(new Error(response.msg));
+                    try {
+                        var response = JSON.parse(body);
+                        if (response.success === true) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(new Error(response.msg));
+                        }
+                    } catch (e) {
+                        deferred.reject(new Error('Error deleting package ' + packageName + ': ' + e));
                     }
                 }
             }
