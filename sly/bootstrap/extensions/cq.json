@@ -1,33 +1,29 @@
 {
-    "attributes": {
-        "data-sly-clientlib-js":        {},
-        "data-sly-clientlib-css":       {}    
-    },
     "beanClasses": {
-        "com.day.cq.wcm.api.Page":                  
-        { 
-            "hidden": true, 
+        "com.day.cq.wcm.api.Page":
+        {
+            "hidden": true,
             "members" : [
                 {"name":"language"},
-                {"name":"lastModifiedBy"}, 
-                {"name":"listChildren"}, 
-                {"name":"name"}, 
-                {"name":"navigationTitle"}, 
-                {"name":"pageTitle"}, 
-                {"name":"parent"}, 
-                {"name":"path"}, 
-                {"name":"properties"}, 
-                {"name":"tags"}, 
-                {"name":"title"}, 
-                {"name":"vanityUrl"}, 
-                {"name":"hasChild"}, 
-                {"name":"hasContent"}, 
-                {"name":"isHideInNav"}, 
-                {"name":"isLocked"}, 
+                {"name":"lastModifiedBy"},
+                {"name":"listChildren"},
+                {"name":"name"},
+                {"name":"navigationTitle"},
+                {"name":"pageTitle"},
+                {"name":"parent"},
+                {"name":"path"},
+                {"name":"properties"},
+                {"name":"tags"},
+                {"name":"title"},
+                {"name":"vanityUrl"},
+                {"name":"hasChild"},
+                {"name":"hasContent"},
+                {"name":"isHideInNav"},
+                {"name":"isLocked"},
                 {"name":"isValid"}]},
-        "com.day.cq.wcm.api.WCMMode": 
+        "com.day.cq.wcm.api.WCMMode":
         {
-            "hidden": true, 
+            "hidden": true,
             "members" : [
                 {"name":"edit"},
                 {"name":"preview"},
@@ -35,7 +31,7 @@
                 {"name":"design"}]
         }
     },
-    
+
     "beans": {
         "currentPage": {
             "name": "currentPage",
@@ -45,5 +41,5 @@
             "name": "wcmmode",
             "clazz": "com.day.cq.wcm.api.WCMMode"
         }
-    }   
+    }
 }

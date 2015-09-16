@@ -32,6 +32,35 @@
       },
       "DEFAULT_NAME": "item"
     },
+    "REPEAT": {
+      "DECL": "data-sly-repeat",
+      "CLASS": {
+        "members": [
+          {
+            "name": "index"
+          },
+          {
+            "name": "count"
+          },
+          {
+            "name": "first"
+          },
+          {
+            "name": "middle"
+          },
+          {
+            "name": "last"
+          },
+          {
+            "name": "odd"
+          },
+          {
+            "name": "even"
+          }
+        ]
+      },
+      "DEFAULT_NAME": "item"
+    },
     "EXPR_START": "${",
     "EXPR_END": "}",
     "EXPR_REGEX": "\\$\\{.*\\}",
@@ -79,6 +108,9 @@
       "mandatory": true
     },
     "data-sly-list": {
+      "type": "EXPR"
+    },
+    "data-sly-repeat": {
       "type": "EXPR"
     },
     "data-sly-resource": {

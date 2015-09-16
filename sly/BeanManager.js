@@ -30,7 +30,7 @@ define(function (require, exports, module) {
      */
     function BeanManager() {
     }
-        
+
     /**
      * Registers a bean declared at a given place
      */
@@ -43,26 +43,27 @@ define(function (require, exports, module) {
                 end : end
             };
             if (!beanClasses[beanClass]) {
-                beanClasses[beanClass] = {};//in that case, we register an empty instance 
+                beanClasses[beanClass] = {};//in that case, we register an empty instance
                                             //of the class
             }
         } catch (e) {
             console.error("unable to register bean instance: " + e);
         }
     }
-    
+
     /**
      * registers a list bean for the block
      */
-    function registerListInstance(attName, attValue, startPos, endPos) {
-        var name = sightlyLanguage.extractBeanVarName(attName);
-        name = name === null ? slyConstants.LIST.DEFAULT_NAME : name;
-        if (!beanClasses[slyConstants.LIST.DECL]) {
-            beanClasses[slyConstants.LIST.DECL] = slyConstants.LIST.CLASS;
-        }
-        registerBeanInstance(name, slyConstants.LIST.DECL, startPos, endPos);
+    function registerListInstance(attName, attValue, startPos, endPos, isRepeat) {
+        var list = isRepeat ? slyConstants.REPEAT : slyConstants.LIST,
+            name = sightlyLanguage.extractBeanVarName(attName);
+        name = name === null ? list.DEFAULT_NAME : name;
+        if (!beanClasses[list.DECL]) {
+             beanClasses[list.DECL] = list.CLASS;
+         }
+         registerBeanInstance(name, list.DECL, startPos, endPos);
     }
-        
+
     /* from a given local js bean class file, extract the bean class object & registers it */
     function _registerLocalJSBeanClass(path) {
         /*TODO DocumentManager.getDocumentForPath(path)
@@ -75,14 +76,14 @@ define(function (require, exports, module) {
                         members : []
                     };
                     buffer = doc.getText().substring(reg.lastIndex),
-                    declare = buffer.indexOf(":"), 
+                    declare = buffer.indexOf(":"),
                     open, close, next;
                 while (declare > 0) {
                     beanClass.members.push(buffer.substring(0, declare).replace(/\s\n\"\'/g,"");
-                    buffer = buffer.substring(declare + 1);                                           
+                    buffer = buffer.substring(declare + 1);
                 }
                 var returnObject = JSON.parse(jsonString),
-                    
+
                 $.each(returnObject, function (key, value) {
                     beanClass.members.push({"name": key}); //for now we just register first level
                 });
@@ -95,7 +96,7 @@ define(function (require, exports, module) {
     function _registerLocalJavaBeanClass(path) {
         /*TODO*/
     }
-    
+
     /* refreshes the beans for a given doc: defaults beans, and available bean classes */
     function _refreshBeans(event, doc) {
         beanClasses = $.extend(true, {}, initBeanClasses);
@@ -119,7 +120,7 @@ define(function (require, exports, module) {
         });
         beans = $.extend(true, {}, initBeans);
     }
-     
+
     /**
      * parsed sly block: we register beans (and specific list ones)
      */
@@ -132,12 +133,12 @@ define(function (require, exports, module) {
                 }
             }
 
-            if (key.indexOf(slyConstants.LIST.DECL) === 0) {
-                registerListInstance(key, tag.attributes[key].value, tag.start, tag.blockEndPos);
+            if (key.indexOf(slyConstants.LIST.DECL) === 0 || key.indexOf(slyConstants.REPEAT.DECL) === 0) {
+                registerListInstance(key, tag.attributes[key].value, tag.start, tag.blockEndPos, key.indexOf(slyConstants.REPEAT.DECL) === 0);
             }
         });
     }
-    
+
     /**
      * we remove all the beans registered on that line, further event will re-register them
      */
@@ -160,10 +161,10 @@ define(function (require, exports, module) {
             console.log("unable to reset the line: " + e);
         }
     }
-    
+
     function _reRegisterBean(attName, attValue, start) {
         var beanName = sightlyLanguage.extractBeanVarName(attName);
-        if (attName.indexOf(slyConstants.LIST.DECL) === 0) {
+        if (attName.indexOf(slyConstants.LIST.DECL) === 0 || attName.indexOf(slyConstants.REPEAT.DECL) === 0) {
             //list
             var end;
             if (removedBlocks[beanName]) {
@@ -172,14 +173,14 @@ define(function (require, exports, module) {
             } else {
                 console.warn(beanName + " list bean can't be found, the scope won't end at the end of the block");
             }
-            registerListInstance(attName, attValue, start, end);
+            registerListInstance(attName, attValue, start, end, attName.indexOf(slyConstants.REPEAT.DECL) === 0);
         } else {
-            //normal 
+            //normal
             registerBeanInstance(beanName, attValue, start);
         }
     }
-               
-    
+
+
     /**
      * event received on a line re-parsing: we re-register the beans
      */
@@ -194,11 +195,11 @@ define(function (require, exports, module) {
             console.log("unable to treat event " + e);
         }
     }
-        
+
     function getBeans() {
         return beans;
     }
-    
+
     /**
      * return an array of beans available at the cursor position (beans
      * declared *after* the cursor are not available
@@ -226,7 +227,7 @@ define(function (require, exports, module) {
         });
         return availableBeans;
     }
-    
+
     /**
      * Get bean classes available (i.e. not hidden)
      */
@@ -239,7 +240,7 @@ define(function (require, exports, module) {
         });
         return publicClasses;
     }
-    
+
     /**
      * get one beans member names' list
      * use
@@ -264,7 +265,7 @@ define(function (require, exports, module) {
         $(sightlyLanguage).on("changedLine", _onChangedLine);
         $(sightlyLanguage).on("parsedSlyAttributeName", _onParsedAttributeName);
     }
-    
+
     //public api
     exports.load = load;
     exports.getBeans = getBeans;
