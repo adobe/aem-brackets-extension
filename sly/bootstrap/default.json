@@ -1,10 +1,39 @@
 {
   "constants": {
     "SHORTCUT": "sly",
-    "PREFIX": "data-sly-",
+    "PREFIX": "da",
     "BEAN_DECL": "data-sly-use",
     "LIST": {
       "DECL": "data-sly-list",
+      "CLASS": {
+        "members": [
+          {
+            "name": "index"
+          },
+          {
+            "name": "count"
+          },
+          {
+            "name": "first"
+          },
+          {
+            "name": "middle"
+          },
+          {
+            "name": "last"
+          },
+          {
+            "name": "odd"
+          },
+          {
+            "name": "even"
+          }
+        ]
+      },
+      "DEFAULT_NAME": "item"
+    },
+    "REPEAT": {
+      "DECL": "data-sly-repeat",
       "CLASS": {
         "members": [
           {
@@ -79,6 +108,9 @@
       "mandatory": true
     },
     "data-sly-list": {
+      "type": "EXPR"
+    },
+    "data-sly-repeat": {
       "type": "EXPR"
     },
     "data-sly-resource": {

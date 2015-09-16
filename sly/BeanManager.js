@@ -54,15 +54,16 @@ define(function (require, exports, module) {
     /**
      * registers a list bean for the block
      */
-    function registerListInstance(attName, attValue, startPos, endPos) {
+    function registerListInstance(attName, attValue, startPos, endPos, isRepeat) {
+        var list = isRepeat ? slyConstants.REPEAT : slyConstants.LIST;
         var name = sightlyLanguage.extractBeanVarName(attName);
-        name = name === null ? slyConstants.LIST.DEFAULT_NAME : name;
-        if (!beanClasses[slyConstants.LIST.DECL]) {
-            beanClasses[slyConstants.LIST.DECL] = slyConstants.LIST.CLASS;
+        name = name === null ? list.DEFAULT_NAME : name;
+        if (!beanClasses[list.DECL]) {
+            beanClasses[list.DECL] = list.CLASS;
         }
-        registerBeanInstance(name, slyConstants.LIST.DECL, startPos, endPos);
+        registerBeanInstance(name, list.DECL, startPos, endPos);
     }
-        
+
     /* from a given local js bean class file, extract the bean class object & registers it */
     function _registerLocalJSBeanClass(path) {
         /*TODO DocumentManager.getDocumentForPath(path)
@@ -132,8 +133,8 @@ define(function (require, exports, module) {
                 }
             }
 
-            if (key.indexOf(slyConstants.LIST.DECL) === 0) {
-                registerListInstance(key, tag.attributes[key].value, tag.start, tag.blockEndPos);
+            if (key.indexOf(slyConstants.LIST.DECL) === 0 || key.indexOf(slyConstants.REPEAT.DECL) === 0) {
+                registerListInstance(key, tag.attributes[key].value, tag.start, tag.blockEndPos, key.indexOf(slyConstants.REPEAT.DECL) === 0);
             }
         });
     }
@@ -163,7 +164,7 @@ define(function (require, exports, module) {
     
     function _reRegisterBean(attName, attValue, start) {
         var beanName = sightlyLanguage.extractBeanVarName(attName);
-        if (attName.indexOf(slyConstants.LIST.DECL) === 0) {
+        if (attName.indexOf(slyConstants.LIST.DECL) === 0 || attName.indexOf(slyConstants.REPEAT.DECL) === 0) {
             //list
             var end;
             if (removedBlocks[beanName]) {
@@ -172,7 +173,7 @@ define(function (require, exports, module) {
             } else {
                 console.warn(beanName + " list bean can't be found, the scope won't end at the end of the block");
             }
-            registerListInstance(attName, attValue, start, end);
+            registerListInstance(attName, attValue, start, end, attName.indexOf(slyConstants.REPEAT.DECL) === 0);
         } else {
             //normal 
             registerBeanInstance(beanName, attValue, start);
