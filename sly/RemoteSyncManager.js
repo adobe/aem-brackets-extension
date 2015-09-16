@@ -38,7 +38,7 @@ define(function (require, exports, module) {
                     contents.forEach(function (file) {
                         SlyDomain.exec('postFile', '/apps/system/install', file.fullPath).fail(
                             function(err) {
-                                console.error(err);
+                                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error uploading Sling dependencies. ' + err);
                             }
                         );
                     });
@@ -68,7 +68,7 @@ define(function (require, exports, module) {
                                         _calculateSyncStatus(fileSyncStatus, false);
                                     },
                                     function (err) {
-                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
+                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error exporting to server ' + err);
                                     }
                                 );
                             }
@@ -102,7 +102,7 @@ define(function (require, exports, module) {
                                         _calculateSyncStatus(fileSyncStatus, true);
                                     },
                                     function (err) {
-                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, err, err);
+                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error importing from server: ' + err);
                                     }
                                 );
                             }
