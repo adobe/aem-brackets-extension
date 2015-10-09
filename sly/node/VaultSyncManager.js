@@ -468,6 +468,7 @@
                                 walk(file, function (err, res) {
                                     results = results.concat(res);
                                     if (!--pending) {
+                                        results.push(dir);
                                         callback(null, results);
                                     }
                                 });
