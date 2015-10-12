@@ -68,12 +68,18 @@ define(function (require, exports, module) {
                                         _calculateSyncStatus(fileSyncStatus, false);
                                     },
                                     function (err) {
-                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error exporting to server ' + err);
+                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err);
                                     }
                                 );
+                            },
+                            function (err) {
+                                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
                             }
                         ).done();
                     }
+                },
+                function (err) {
+                    ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
                 }
             ).done();
         } else {
@@ -102,13 +108,19 @@ define(function (require, exports, module) {
                                         _calculateSyncStatus(fileSyncStatus, true);
                                     },
                                     function (err) {
-                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error importing from server: ' + err);
+                                        ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err);
                                     }
                                 );
+                            },
+                            function (err) {
+                                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
                             }
                         ).done();
                     }
 
+                },
+                function (err) {
+                    ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
                 }
             ).done();
         } else {
@@ -215,15 +227,10 @@ define(function (require, exports, module) {
     function exportContentPackage() {
         ProjectUtils.getJcrRoot().then(
             function (root) {
-                if (root) {
-                    ProjectUtils.getFilterFile().then(
-                        function (filterFile) {
-                            if (filterFile) {
-                                CommandManager.get(CMD_PUSH_REMOTE).execute(root);
-                            }
-                        }
-                    ).done();
-                }
+                CommandManager.get(CMD_PUSH_REMOTE).execute(root);
+            },
+            function (err) {
+                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
             }
         ).done();
     }
@@ -231,15 +238,10 @@ define(function (require, exports, module) {
     function importContentPackage() {
         ProjectUtils.getJcrRoot().then(
             function (root) {
-                if (root) {
-                    ProjectUtils.getFilterFile().then(
-                        function (filterFile) {
-                            if (filterFile) {
-                                CommandManager.get(CMD_PULL_REMOTE).execute(root);
-                            }
-                        }
-                    ).done();
-                }
+                CommandManager.get(CMD_PULL_REMOTE).execute(root);
+            },
+            function (err) {
+                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', err.message);
             }
         ).done();
     }

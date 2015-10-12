@@ -15,8 +15,8 @@
         };
 
     /**
-     * A <code>Filter</code> represents a single 'filter' entry from an Apache Jackrabbit FileVault filter.xml file, that describes how the
-     * content of a root path should be treated with regards to importing it into a content repository.
+     * A <code>Filter</code> represents a single 'filter' entry from an Apache Jackrabbit FileVault filter-vlt.xml / filter.xml file, that
+     * describes how the content of a root path should be treated with regards to importing it into a content repository.
      *
      * @param {String} root the filter's root path
      * @param {FilterRule[]} rules the 'include' / 'exclude' rules

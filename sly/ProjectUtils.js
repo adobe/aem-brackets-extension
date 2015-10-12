@@ -27,16 +27,20 @@ define(function (require, exports, module) {
                         break;
                     }
                 }
+                if (deferred.state() !== 'resolved') {
+                    deferred.reject(new Error('Cannot find a jcr_root folder for this project'));
+                }
             },
             function (err) {
                 deferred.reject(err);
             }
-        )
+        ).done();
         return deferred;
     }
 
     /**
-     * Retrieves the absolute path to the <code>filter.xml</code> file from the opened content-package project.
+     * Retrieves the absolute path to the <code>filter-vlt.xml</code> or <code>filter.xml</code> file from the opened content-package
+     * project.
      *
      * @returns {promise|String} a promise resolved with the absolute path to the <code>filter.xml</code> file; if the file cannot be found
      * the returned promise is rejected
@@ -45,10 +49,21 @@ define(function (require, exports, module) {
         var deferred = $.Deferred();
         getJcrRoot().then(
             function (jcrRoot) {
-                var assumedPath = jcrRoot + '../META-INF/vault/filter.xml';
-                FileSystem.resolve(assumedPath, function (err, entry, stat) {
+                var filter = jcrRoot + '../META-INF/vault/filter-vlt.xml';
+                FileSystem.resolve(filter, function (err, entry, stat) {
                     if (err) {
-                        deferred.reject(new Error('Cannot find filter file. Reason: ' + err));
+                        filter = jcrRoot + '../META-INF/vault/filter.xml';
+                        FileSystem.resolve(filter, function (err, entry, stat) {
+                            if (err) {
+                                deferred.reject(new Error('Cannot find a Vault filter: filter-vlt.xml, filter.xml.'));
+                                return;
+                            }
+                            if (entry.isDirectory) {
+                                deferred.reject(new Error('Entry ' + entry.fullPath + ' resolved to a folder.'));
+                                return;
+                            }
+                            deferred.resolve(entry.fullPath);
+                        });
                         return;
                     }
                     if (entry.isDirectory) {

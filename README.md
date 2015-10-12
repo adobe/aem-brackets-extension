@@ -13,8 +13,6 @@ After these steps, you should be able to access the `/content/todo.html` URL on 
 
 ## Known Issues or Limitations
 * Embedded content packages are not supported.
-* `filter-vlt.xml` files are not yet taken into consideration.
-* When synchronising a full content package, only the `filter.xml` file from the `META-INF/vault` folder is used as the extension builds ad-hoc content packages that get installed and removed from your AEM instance; therefore your content package's definition is not altered but its content is updated.
 
 ## Reporting Bugs
 Please report any issues you encounter using GitHub's [issue tracker from](https://github.com/Adobe-Marketing-Cloud/aem-sightly-brackets-extension/issues).
