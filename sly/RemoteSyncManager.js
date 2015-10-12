@@ -26,6 +26,7 @@ define(function (require, exports, module) {
         CMD_PUSH_REMOTE = 'sly-push-remote',
         CMD_PULL_REMOTE = 'sly-pull-remote',
         CMD_OPEN_REMOTE = 'sly-open-remote',
+        contextMenuDivider,
         neighbours;
 
     function _uploadSlingDependencies() {
@@ -189,12 +190,6 @@ define(function (require, exports, module) {
         }
     }
 
-    function _toggleSyncContextMenu(toggle) {
-        CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
-        CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
-        CommandManager.get(CMD_OPEN_REMOTE).setEnabled(toggle);
-    }
-
     /* return neighbours of a given doc in the hierarchy */
     function findNeighbours(doc) {
         var dfd = $.Deferred();
@@ -246,21 +241,44 @@ define(function (require, exports, module) {
         ).done();
     }
 
+    function _toggleSyncContextMenu(toggle) {
+        CommandManager.get(CMD_PULL_REMOTE).setEnabled(toggle);
+        CommandManager.get(CMD_PUSH_REMOTE).setEnabled(toggle);
+        CommandManager.get(CMD_OPEN_REMOTE).setEnabled(toggle);
+    }
+
+    function _enableOrDisableContextMenu(toggle) {
+        var project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
+        if (toggle) {
+            contextMenuDivider = project_cmenu.addMenuDivider();
+            project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
+            project_cmenu.addMenuItem(CMD_PULL_REMOTE);
+            project_cmenu.addMenuItem(CMD_OPEN_REMOTE);
+        } else {
+            if (contextMenuDivider) {
+                project_cmenu.removeMenuDivider(contextMenuDivider.id);
+                project_cmenu.removeMenuItem(CMD_PUSH_REMOTE);
+                project_cmenu.removeMenuItem(CMD_PULL_REMOTE);
+                project_cmenu.removeMenuItem(CMD_OPEN_REMOTE);
+                contextMenuDivider = undefined;
+            }
+        }
+
+    }
+
     function load(SLYDictionary) {
         _uploadSlingDependencies();
         CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, _handleSyncFromRemote);
         CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, _handleSyncToRemote);
         CommandManager.register(Strings.CONTEXTUAL_OPEN_REMOTE, CMD_OPEN_REMOTE, _handleOpenRemote);
         var project_cmenu = Menus.getContextMenu(Menus.ContextMenuIds.PROJECT_MENU);
-        project_cmenu.addMenuDivider();
-        project_cmenu.addMenuItem(CMD_PUSH_REMOTE);
-        project_cmenu.addMenuItem(CMD_PULL_REMOTE);
-        project_cmenu.addMenuItem(CMD_OPEN_REMOTE);
-
         $(project_cmenu).on('beforeContextMenuOpen', function () {
             ProjectUtils.getJcrRoot().then(
                 function (root) {
                     var selected = ProjectManager.getSelectedItem();
+                    if (!contextMenuDivider) {
+                        _enableOrDisableContextMenu(true);
+                    }
                     if (!selected) {
                         _toggleSyncContextMenu(false);
                     }
@@ -269,6 +287,9 @@ define(function (require, exports, module) {
                     } else {
                         _toggleSyncContextMenu(false);
                     }
+                },
+                function (err) {
+                    _enableOrDisableContextMenu(false);
                 }
             ).done();
         });
