@@ -9,7 +9,7 @@
     "author" : "Adobe Marketing Cloud (https://github.com/adobe-marketing-cloud)",
     "homepage" : "http://docs.adobe.com/docs/en/dev-tools/sightly-brackets.html",
     "repository" : "https://github.com/adobe-marketing-cloud/aem-sightly-brackets-extension.git",
-    "license" : "Apache License 2.0",
+    "license" : "Apache-2.0",
     "keywords": ["Adobe", "Adobe Experience Manager", "AEM", "Sightly", "sly"],
     "categories": ["editing", "language", "external"],
     "i18n" : ["en", "ro", "en-gb"],
