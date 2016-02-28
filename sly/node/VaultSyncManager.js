@@ -753,11 +753,7 @@
                                             function (zipFileName) {
                                                 return PackMgr.uploadPackage(server, acceptSelfSigned, user, password, zipFileName).then(
                                                     function () {
-                                                        return PackMgr.installPackage(server, acceptSelfSigned, user, password, fullPackageName).then(
-                                                            function () {
-                                                                return PackMgr.deletePackage(server, acceptSelfSigned, user, password, fullPackageName);
-                                                            }
-                                                        );
+                                                        return PackMgr.installPackage(server, acceptSelfSigned, user, password, fullPackageName);
                                                     }
                                                 );
                                             }
