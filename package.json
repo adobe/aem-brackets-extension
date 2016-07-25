@@ -1,5 +1,5 @@
 {
-    "name"           : "aem-sightly-brackets-extension",
+    "name"           : "aem-brackets-extension",
     "title"          : "AEM Brackets Extension",
     "description"    : "The AEM Brackets Extension provides a smooth and easy development workflow for front-end developers to edit AEM components. Its main features are: automatic synchronisation of changed project files to your AEM instance; manual importing of content from the AEM instance to the project; Sightly syntax-highlighting and auto-completion; easy editing of associated client libraries (CSS, JavaScript).",
     "version"        : "0.0.14-dev",
@@ -7,10 +7,10 @@
         "brackets": ">=0.45.0"
     },
     "author" : "Adobe Marketing Cloud (https://github.com/adobe-marketing-cloud)",
-    "homepage" : "http://docs.adobe.com/docs/en/dev-tools/sightly-brackets.html",
-    "repository" : "https://github.com/adobe-marketing-cloud/aem-sightly-brackets-extension.git",
+    "homepage" : "https://docs.adobe.com/content/docs/en/dev-tools/aem-brackets.html",
+    "repository" : "https://github.com/Adobe-Marketing-Cloud/aem-brackets-extension.git",
     "license" : "Apache-2.0",
-    "keywords": ["Adobe", "Adobe Experience Manager", "AEM", "Sightly", "sly"],
+    "keywords": ["Adobe", "Adobe Experience Manager", "AEM", "Sightly", "sly", "HTL"],
     "categories": ["editing", "language", "external"],
     "i18n" : ["en", "ro", "en-gb"],
     "dependencies"   : {
