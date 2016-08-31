@@ -89,7 +89,7 @@
     "DEFAULT_SERVER_URL": "http://localhost:4502",
     "DEFAULT_USER": "admin",
     "DEFAULT_PASSWORD": "admin",
-    "DEFAULT_AUTO_SYNC": true
+    "DEFAULT_AUTO_SYNC": false
   },
   "attributes": {
     "data-sly-attribute": {
