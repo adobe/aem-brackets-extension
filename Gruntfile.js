@@ -9,11 +9,6 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        maven: {
-            options: {
-                goal: 'install'
-            }
-        },
         compress: {
             main: {
                 options: {
@@ -28,7 +23,6 @@ module.exports = function (grunt) {
                             'LICENSE',
                             'NOTICE',
                             'sly/**',
-                            'sling/*',
                             'node_modules/adm-zip/**',
                             'node_modules/archiver/**',
                             'node_modules/fs-extra/**',
@@ -44,9 +38,8 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-maven-tasks');
     grunt.loadNpmTasks('grunt-contrib-compress');
 
     // Default task(s).
-    grunt.registerTask('default', ['maven', 'compress']);
+    grunt.registerTask('default', ['compress']);
 };

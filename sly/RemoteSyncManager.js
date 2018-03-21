@@ -29,25 +29,6 @@ define(function (require, exports, module) {
         contextMenuDivider,
         neighbours;
 
-    function _uploadSlingDependencies() {
-        var slingPath = FileUtils.getNativeModuleDirectoryPath(module) + '/../sling/',
-            slingDir  = FileSystem.getDirectoryForPath(slingPath);
-        if (slingDir) {
-            slingDir.getContents(function (err, contents) {
-                console.log('updating sling remote with ' + contents);
-                if (contents && contents.length > 0) {
-                    contents.forEach(function (file) {
-                        SlyDomain.exec('postFile', '/apps/system/install', file.fullPath).fail(
-                            function(err) {
-                                ToolBar.updateStatusIndicator(true, ToolBar.states.SYNC_NONE, 'Error', 'Error uploading Sling dependencies. ' + err);
-                            }
-                        );
-                    });
-                }
-            });
-        }
-    }
-
     function _handleSyncToRemote(path) {
         var cmd      = Preferences.get('pushCommand'),
             selected = ProjectManager.getSelectedItem(),
@@ -267,7 +248,6 @@ define(function (require, exports, module) {
     }
 
     function load(SLYDictionary) {
-        _uploadSlingDependencies();
         CommandManager.register(Strings.CONTEXTUAL_PULL_REMOTE, CMD_PULL_REMOTE, _handleSyncFromRemote);
         CommandManager.register(Strings.CONTEXTUAL_PUSH_REMOTE, CMD_PUSH_REMOTE, _handleSyncToRemote);
         CommandManager.register(Strings.CONTEXTUAL_OPEN_REMOTE, CMD_OPEN_REMOTE, _handleOpenRemote);
