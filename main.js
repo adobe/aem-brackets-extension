@@ -45,17 +45,6 @@ define(function (require, exports, module) {
             BeanManager.load(SLYDictionary);
             SlyCodeHints.load(SLYDictionary);
             ToolBar.load(SLYDictionary);
-            brackets.getModule(
-                ['file/FilePathProcessor'],
-                function (fpp) {
-                    var CRXDEFilePathProcessor = require('sly/CRXDEFilePathProcessor').CRXDEFilePathProcessor;
-                    brackets.app.registerFilePathProcessor(new CRXDEFilePathProcessor());
-                },
-                function (err) {
-                    var failed = err.requireModules && err.requireModules[0];
-                    console.log('Cannot load module ' + failed);
-                }
-            );
             ExtensionUtils.loadStyleSheet(module, 'sly/styles/sly.css').done();
         } catch (e) {
             console.error('unable to correctly load sightly extension : ' + e);
