@@ -14,7 +14,7 @@
     "categories": ["editing", "language", "external"],
     "i18n" : ["en", "ro", "en-gb"],
     "dependencies"   : {
-        "request" : "~2.34.0",
+        "request" : "~2.74.0",
         "adm-zip" : "0.4.4",
         "q"       : "1.0.1",
         "glob"    : "3.2.9",
