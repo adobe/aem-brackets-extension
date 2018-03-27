@@ -7,7 +7,7 @@
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
 /*global define, brackets, $ */
-define(function (require, exports, module) {
+define(function (require, exports) {
     "use strict";
     //constants
     // Load dependent modules
@@ -18,18 +18,9 @@ define(function (require, exports, module) {
         sightlyLanguage = require("sly/SightlyLanguage"),
         editorManager   = brackets.getModule("editor/EditorManager"),
         HTMLUtils       = brackets.getModule("language/HTMLUtils"),
-        prefs           = require("sly/preferences/Preferences"),
-        highlighter     = require("sly/Highlighter"),
         remoteSyncMgr   = require("sly/RemoteSyncManager"),
-        DocumentManager = brackets.getModule("document/DocumentManager"),
         slyConstants,
         removedBlocks = {};
-
-    /**
-     * @constructor
-     */
-    function BeanManager() {
-    }
 
     /**
      * Registers a bean declared at a given place
@@ -64,49 +55,9 @@ define(function (require, exports, module) {
          registerBeanInstance(name, list.DECL, startPos, endPos);
     }
 
-    /* from a given local js bean class file, extract the bean class object & registers it */
-    function _registerLocalJSBeanClass(path) {
-        /*TODO DocumentManager.getDocumentForPath(path)
-        .done(function(doc){
-            var reg = new RegExp(slyConstants.LOCAL_BEAN_JS.RETURN_OBJECT_REGEXP, "gm"),
-                match;
-            if ((match = reg.exec(doc.getText())) !== null) {
-                //we try to extract & build the array of first level methods names
-                var beanClass = {
-                        members : []
-                    };
-                    buffer = doc.getText().substring(reg.lastIndex),
-                    declare = buffer.indexOf(":"),
-                    open, close, next;
-                while (declare > 0) {
-                    beanClass.members.push(buffer.substring(0, declare).replace(/\s\n\"\'/g,"");
-                    buffer = buffer.substring(declare + 1);
-                }
-                var returnObject = JSON.parse(jsonString),
-
-                $.each(returnObject, function (key, value) {
-                    beanClass.members.push({"name": key}); //for now we just register first level
-                });
-                beanClasses[doc.file.name] = beanClass;
-            }
-        });*/
-    }
-
-    /* from a given local java bean class file, extract the bean class object & registers it */
-    function _registerLocalJavaBeanClass(path) {
-        /*TODO*/
-    }
-
     /* refreshes the beans for a given doc: defaults beans, and available bean classes */
     function _refreshBeans(event, doc) {
         beanClasses = $.extend(true, {}, initBeanClasses);
-        $.ajax({url: prefs.getRemote() + "/etc/clientlibs/granite.sightlyBeans.json", dataType: "json"})
-            .done(function (remoteBeans) {
-                //at that moment, classes might have been filled already, with empty object
-                $.each(remoteBeans, function (className, classObject) {
-                    beanClasses[className] = classObject;
-                });
-            });
         remoteSyncMgr.findNeighbours(doc).done(function (paths) {
             var jsBeanRegexp = new RegExp(slyConstants.LOCAL_BEAN_JS.REGEX, "gm"),
                 javaBeanRegexp = new RegExp(slyConstants.LOCAL_BEAN_JAVA.REGEX, "gm");
@@ -233,7 +184,7 @@ define(function (require, exports, module) {
      */
     function getBeanClasses() {
         var publicClasses = {};
-        $.each(beanClasses, function (name, clazz) {
+        $.each(beanClasses, function (name, clazz) {
             if (!clazz.hidden) {
                 publicClasses[name] = clazz;
             }
@@ -275,6 +226,5 @@ define(function (require, exports, module) {
     exports.registerBeanInstance = registerBeanInstance;
     exports.registerListInstance = registerListInstance;
     exports.__testonly__onChangedLine = _onChangedLine;
-    exports.__testonly__refreshBeans = _refreshBeans;
     exports.__testonly__reRegisterBean = _reRegisterBean;
 });
