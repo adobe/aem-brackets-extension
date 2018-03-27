@@ -2,7 +2,7 @@
     "name"           : "aem-sightly-brackets-extension",
     "title"          : "AEM Brackets Extension",
     "description"    : "The AEM Brackets Extension provides a smooth and easy development workflow for front-end developers to edit AEM components. Its main features are: automatic synchronisation of changed project files to your AEM instance; manual importing of content from the AEM instance to the project; Sightly syntax-highlighting and auto-completion; easy editing of associated client libraries (CSS, JavaScript).",
-    "version"        : "0.0.14",
+    "version"        : "0.0.15-dev",
     "engines"        : {
         "brackets": ">=0.45.0"
     },
