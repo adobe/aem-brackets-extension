@@ -23,14 +23,7 @@
         EXCLUDES = ['.vlt', '.vltignore', '.vlt-sync.log', '.vlt-sync-config.properties', '.DS_Store'],
         VLTIGNORE = '.vltignore',
         pseudoRandomBytes = Q.denodeify(Crypto.pseudoRandomBytes),
-        mkdir = Q.denodeify(Fs.mkdir),
-        mkdirp = Q.denodeify(Fs.mkdirs),
-        copy = Q.denodeify(Fs.copy),
-        remove = Q.denodeify(Fs.remove),
-        appendFile = Q.denodeify(Fs.appendFile),
-        readFile = Q.denodeify(Fs.readFile),
         glob = Q.denodeify(Glob),
-        stat = Q.denodeify(Fs.stat),
         Archiver = require('archiver'),
         VaultIgnoreParser = require('./VaultIgnore');
 
@@ -60,7 +53,7 @@
      */
     function getFilterFolderPath(path) {
         var deferred = Q.defer();
-        stat(path).then(
+        Fs.stat(path).then(
             function (statObj) {
                 if (statObj.isDirectory()) {
                     var ffp = path.substring(path.indexOf(JCR_ROOT) + JCR_ROOT.length);
@@ -147,8 +140,11 @@
             }
         ).then(
             function (temporaryWorkingFolder) {
-                mkdir(temporaryWorkingFolder, '0755').done();
-                return temporaryWorkingFolder;
+                return Fs.mkdir(temporaryWorkingFolder, '0755').then(
+                    function () {
+                        return temporaryWorkingFolder;
+                    }
+                );
             }
         );
     }
@@ -162,16 +158,16 @@
     function writeExcludes(path, excludesFilePath) {
         var rootPath = getRootPath(path),
             deferred = Q.defer();
-        appendFile(excludesFilePath, '')
+        Fs.appendFile(excludesFilePath, '')
             .then(
             function () {
-                return appendFile(excludesFilePath, EXCLUDES.join('\n')).then(appendFile(excludesFilePath, '\n'));
+                return Fs.appendFile(excludesFilePath, EXCLUDES.join('\n')).then(Fs.appendFile(excludesFilePath, '\n'));
             }
         ).then(
             function () {
                 return exists(rootPath + VLTIGNORE).then(
                     function () {
-                        readFile(rootPath + VLTIGNORE).then(
+                        Fs.readFile(rootPath + VLTIGNORE).then(
                             /*
                              *   if there's a local '.vltignore' file append its contents to the excludes file
                              */
@@ -188,7 +184,7 @@
                                         }
                                     }
                                 }
-                                appendFile(excludesFilePath, ignores.join('\n')).done();
+                                Fs.appendFile(excludesFilePath, ignores.join('\n')).done();
                             }
                         ).done();
                     },
@@ -202,7 +198,7 @@
                 var searchFolder = Path.normalize(path);
 
                 function readAndAppend(file, relPath) {
-                    return readFile(file).then(
+                    return Fs.readFile(file).then(
                         function (data) {
                             var ignores = [];
                             var lines = data.toString().split('\n');
@@ -216,7 +212,7 @@
                                     }
                                 }
                             }
-                            return appendFile(excludesFilePath, ignores.join('\n'));
+                            return Fs.appendFile(excludesFilePath, ignores.join('\n'));
                         }
                     );
                 }
@@ -250,7 +246,7 @@
             function (error) {
                 deferred.reject(new Error(error));
             }
-        ).done();
+        );
         return deferred.promise;
     }
 
@@ -287,20 +283,20 @@
         }
         filterString += '</workspaceFilter>';
 
-        return mkdirp(tempWorkingDirectory + Path.sep + 'META-INF' + Path.sep + 'vault').then(
+        return Fs.mkdirp(tempWorkingDirectory + Path.sep + 'META-INF' + Path.sep + 'vault').then(
             function () {
-                return mkdirp(tempWorkingDirectory + Path.sep + JCR_ROOT);
+                return Fs.mkdirp(tempWorkingDirectory + Path.sep + JCR_ROOT);
             }
         ).then(
             function () {
-                return appendFile(
+                return Fs.appendFile(
                         tempWorkingDirectory + Path.sep + 'META-INF' + Path.sep + 'vault' + Path.sep + 'filter.xml',
                     filterString
                 );
             }
         ).then(
             function () {
-                return appendFile(
+                return Fs.appendFile(
                         tempWorkingDirectory + Path.sep + 'META-INF' + Path.sep + 'vault' + Path.sep + 'properties.xml',
                         '\
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>\n\
@@ -336,14 +332,9 @@
                 for (var ci = 0; ci < contents.length; ci++) {
                     cfile = contents[ci];
                     remoteFilePath = getRemotePath(cfile);
-                    var relPath = Path.relative(remotePath, remoteFilePath);
                     for (i = 0; i < filters.length; i++) {
                         var filter = filters[i];
                         var syncStatus = filter.getSyncStatus(remoteFilePath);
-                        if (Path.basename(cfile) === '.content.xml' &&
-                            (remoteFilePath.indexOf(filter.root) === 0 || filter.root.indexOf(Path.dirname(remoteFilePath)) === 0)) {
-                            syncStatus = Constants.sync.FILTER_INCLUDED;
-                        }
                         if (syncStatus === Constants.sync.FILTER_INCLUDED) {
                             // short-circuit: if a filter marks a path as included no other filter can exclude it
                             fileSyncStatus[remoteFilePath] = {filter: filter, result: syncStatus};
@@ -359,12 +350,16 @@
                         }
                     }
                     if (fileSyncStatus[remoteFilePath] && fileSyncStatus[remoteFilePath].result === Constants.sync.FILTER_INCLUDED) {
+                        var relPath = Path.relative(remotePath, remoteFilePath);
                         if (vaultIgnore.denies(relPath)) {
-                            fileSyncStatus[remoteFilePath] = {result: -2};
+                            fileSyncStatus[remoteFilePath] = {result: Constants.sync.EXCLUDED};
                         }
                     }
                 }
                 deferred.resolve(fileSyncStatus);
+            },
+            function (err) {
+                deferred.reject(err);
             }
         ).done();
         return deferred.promise;
@@ -372,11 +367,14 @@
 
     function copyFilter(file, fileSyncStatus) {
         var remotePath = getRemotePath(file);
+        var entry = fileSyncStatus[remotePath];
+        if (entry && entry.result === Constants.sync.FILTER_INCLUDED) {
+            return true;
+        }
         for (var f in fileSyncStatus) {
             if (fileSyncStatus.hasOwnProperty(f)) {
-                var entry = fileSyncStatus[f];
                 if (remotePath.indexOf(f) === 0 || f.indexOf(remotePath) === 0) {
-                    if (entry.result === Constants.sync.FILTER_INCLUDED) {
+                    if (fileSyncStatus[f].result === Constants.sync.FILTER_INCLUDED) {
                         return true;
                     }
                 }
@@ -435,54 +433,13 @@
         return deferred.promise;
     }
 
-    /**
-     * This recursive function walks over the descendants of a folder.
-     *
-     * @param {String} dir the folder to walk
-     * @param {Function} callback a Node-style errback function which will receive a String array of descendant paths; in case the supplied
-     * <code>dir</code> path is a file, the array will contain only the file's path
-     */
-    function walk(dir, callback) {
-        var results = [];
-        Fs.stat(dir, function (err, stat) {
-            if (err) {
-                callback(err);
-            }
-            if (!stat.isDirectory()) {
-                results.push(dir);
-                callback(null, results);
-            } else {
-                Fs.readdir(dir, function (err, list) {
-                    if (err) {
-                        callback(err);
-                    }
-                    var pending = list.length;
-                    if (!pending) {
-                        results.push(dir);
-                        callback(null, results);
-                    }
-                    list.forEach(function (file) {
-                        file = Path.normalize(dir + Path.sep + file);
-                        Fs.stat(file, function (err, stat) {
-                            if (stat && stat.isDirectory()) {
-                                walk(file, function (err, res) {
-                                    results = results.concat(res);
-                                    if (!--pending) {
-                                        results.push(dir);
-                                        callback(null, results);
-                                    }
-                                });
-                            } else {
-                                results.push(file);
-                                if (!--pending) {
-                                    callback(null, results);
-                                }
-                            }
-                        });
-                    });
-                });
-            }
+    function walkSync(dir, filelist = []) {
+        Fs.readdirSync(dir).forEach(file => {
+            filelist = Fs.statSync(Path.join(dir, file)).isDirectory() ?
+                walkSync(Path.join(dir, file), filelist) :
+                filelist.concat(Path.join(dir, file));
         });
+        return filelist;
     }
 
     /**
@@ -503,22 +460,25 @@
      * Retrieves the descendants of a folder. In case the supplied path is a file the returned promise will be resolved with an array
      * containing only the file's path.
      *
-     * @param {String} folder the folder for which to get the descendants
+     * @param {String} path the folder for which to get the descendants
      * @returns {promise|Q.promise} a promise resolved with the String array of descendant paths
      */
-    function getFolderContents(folder) {
+    function getFolderContents(path) {
         var deferred = Q.defer();
-        exists(folder).then(
+        exists(path).then(
             function () {
-                walk(folder, function (err, results) {
-                    if (err) {
-                        deferred.reject(err);
-                    }
-                    deferred.resolve(results);
-                });
+                var filelist = [];
+                try {
+                    filelist = walkSync(path, filelist);
+                    deferred.resolve(filelist);
+                } catch (e) {
+                    // path was a file
+                    filelist.push(path);
+                    deferred.resolve(filelist);
+                }
             },
-            function () {
-                deferred.resolve([]);
+            function (err) {
+                deferred.reject(err);
             }
         ).done();
         return deferred.promise;
@@ -597,7 +557,7 @@
      */
     function parseFilterXML(file) {
         var deferred = Q.defer();
-        readFile(file).then(
+        Fs.readFile(file).then(
             function (fileBuffer) {
                 var xml = fileBuffer.toString();
                 var DOMParser = XMLDom.DOMParser;
@@ -688,7 +648,7 @@
                                 }
                             ).then(
                                 function () {
-                                    return mkdirp(tempFolder + Path.sep + JCR_ROOT + filterFolderPath);
+                                    return Fs.mkdirp(tempFolder + Path.sep + JCR_ROOT + filterFolderPath);
                                 }
                             ).then(
                                 function () {
@@ -706,20 +666,23 @@
                                             function () {
                                                 return exists(path).then(
                                                     function () {
-                                                        return copy(
+                                                        return Fs.copy(
                                                             path,
-                                                                tempFolder + Path.sep + JCR_ROOT + Path.sep +
+                                                            tempFolder + Path.sep + JCR_ROOT + Path.sep +
                                                                 (filterFolderPath === filter ? filterFolderPath : filter),
-                                                            function (file) {
-                                                                return copyFilter(file, fileSyncStatus);
+                                                                {
+                                                                    filter: function (file) {
+                                                                        return copyFilter(file, fileSyncStatus);
+                                                                    }
                                                             }
+
                                                         );
                                                     }
                                                 );
                                             }
                                         ).then(
                                             function () {
-                                                return remove(tempFolder + Path.sep + '.excludes');
+                                                return Fs.remove(tempFolder + Path.sep + '.excludes');
                                             }
                                         ).then(
                                             function () {
@@ -763,7 +726,7 @@
                                             }
                                         ).then(
                                             function () {
-                                                return remove(tempFolder);
+                                                return Fs.remove(tempFolder);
                                             }
                                         );
                                     } else if (action === PULL) {
@@ -789,12 +752,12 @@
                                             function () {
                                                 return getTempWorkingFolder().then(
                                                     function (newTempWorkingFolder) {
-                                                        return copy(
+                                                        return Fs.copy(
                                                                 tempFolder + Path.sep + '.excludes',
                                                                 newTempWorkingFolder + Path.sep + '.excludes'
                                                         ).then(
                                                             function () {
-                                                                return remove(tempFolder).then(
+                                                                return Fs.remove(tempFolder).then(
                                                                     function () {
                                                                         tempFolder = newTempWorkingFolder;
                                                                     }
@@ -859,23 +822,26 @@
                                                     function () {
                                                         return exists(tempFolder + Path.sep + JCR_ROOT + filter).then(
                                                             function () {
-                                                                return copy(
+                                                                return Fs.copy(
                                                                     tempFolder + Path.sep + JCR_ROOT + filter,
                                                                     path,
-                                                                    function (file) {
-                                                                        var rPath = getRemotePath(file);
-                                                                        var relativePath = Path.relative(tempFolder + Path.sep + JCR_ROOT, file);
-                                                                        if (copyFilter(file, fileSyncStatus)) {
-                                                                            pathsFromRemote[rPath] = true;
-                                                                            var tempHash = tempHashes[relativePath];
-                                                                            var localHash = localHashes[relativePath];
-                                                                            if (localHash) {
-                                                                                return !(localHash === tempHash);
+                                                                    {
+                                                                        filter: function (file) {
+                                                                            var rPath = getRemotePath(file);
+                                                                            var relativePath = Path.relative(tempFolder + Path.sep + JCR_ROOT, file);
+                                                                            if (copyFilter(file, fileSyncStatus)) {
+                                                                                pathsFromRemote[rPath] = true;
+                                                                                var tempHash = tempHashes[relativePath];
+                                                                                var localHash = localHashes[relativePath];
+                                                                                if (localHash) {
+                                                                                    return !(localHash === tempHash);
+                                                                                }
+                                                                                return true;
                                                                             }
-                                                                            return true;
+                                                                            return false;
                                                                         }
-                                                                        return false;
                                                                     }
+
                                                                 );
                                                             },
                                                             function (err) {
@@ -888,48 +854,46 @@
                                                     }
                                                 ).then(
                                                     function () {
-                                                        var shouldDeleteLocalFiles = false,
-                                                            emptyFileSyncStatus = true;
-                                                        for (var f in fileSyncStatus) {
-                                                            if (fileSyncStatus.hasOwnProperty(f)) {
-                                                                emptyFileSyncStatus = false;
-                                                                var entry = fileSyncStatus[f];
-                                                                if (Path.basename(f) !== '.content.xml' &&
-                                                                    entry.result !== Constants.sync.FILTER_IGNORED) {
-                                                                    shouldDeleteLocalFiles = true;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                        if (emptyFileSyncStatus) {
-                                                            shouldDeleteLocalFiles = true;
-                                                        }
-                                                        if (shouldDeleteLocalFiles) {
-                                                            getFolderContents(path).then(
-                                                                function (files) {
-                                                                    var i,
-                                                                        file,
-                                                                        rPath;
-                                                                    for (i = 0; i < files.length; i++) {
-                                                                        file = files[i];
-                                                                        rPath = getRemotePath(file);
-                                                                        if (!pathsFromRemote[rPath] && vaultIgnore.accepts(rPath.slice(1))) {
-                                                                            if (!fileIsInBasicExcludes(file)) {
-                                                                                fileSyncStatus[rPath] = {
-                                                                                    path: file,
-                                                                                    result: Constants.sync.DELETED_FROM_REMOTE
-                                                                                };
-                                                                                remove(file).done();
+                                                        return buildSyncStatusList(filters, vaultIgnore, path).then(
+                                                            function (_localFileSyncStatus) {
+                                                                return getFolderContents(path).then(
+                                                                    function (files) {
+                                                                        var i,
+                                                                            file,
+                                                                            rPath;
+                                                                        var foldersToDelete = [];
+                                                                        for (i = 0; i < files.length; i++) {
+                                                                            file = files[i];
+                                                                            rPath = getRemotePath(file);
+                                                                            if (!pathsFromRemote[rPath] && vaultIgnore.accepts(rPath.slice(1))) {
+                                                                                if (!fileIsInBasicExcludes(file)) {
+                                                                                    if (_localFileSyncStatus[rPath] !== undefined &&
+                                                                                        _localFileSyncStatus[rPath].result !== Constants.sync.FILTER_IGNORED &&
+                                                                                        _localFileSyncStatus[rPath].result !== Constants.sync.FILTER_EXCLUDED
+                                                                                    ) {
+                                                                                        fileSyncStatus[rPath] = {
+                                                                                            path: file,
+                                                                                            result: Constants.sync.DELETED_FROM_REMOTE
+                                                                                        };
+                                                                                        Fs.removeSync(file);
+                                                                                        if (Path.basename(file) === '.content.xml') {
+                                                                                            foldersToDelete.push(Path.dirname(file));
+                                                                                        }
+                                                                                    }
+                                                                                }
                                                                             }
                                                                         }
+                                                                        for (i = 0; i < foldersToDelete.length; i++) {
+                                                                            Fs.removeSync(foldersToDelete[i]);
+                                                                        }
                                                                     }
-                                                                }
-                                                            ).done();
-                                                        }
+                                                                );
+                                                            }
+                                                        );
                                                     }
                                                 ).then(
                                                     function () {
-                                                        return remove(tempFolder);
+                                                        return Fs.remove(tempFolder);
                                                     }
                                                 );
                                             }
