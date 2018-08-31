@@ -17,33 +17,6 @@ After these steps, you should be able to access the `/content/todo.html` URL on 
 ## Reporting Bugs
 Please report any issues you encounter using GitHub's [issue tracker from](https://github.com/Adobe-Marketing-Cloud/aem-brackets-extension/issues).
 
-In order to help us investigate the reported issues, please include at minimum, the following information:
-
-1. Brackets version (e.g. sprint 42)
-2. AEM Brackets Extension version (e.g. 0.0.4)
-3. OS and architecture (e.g. Windows 8.1 x64, Mac OS X 10.9.4, Ubuntu 14.04 32-bit, etc.)
-4. a brief list of steps to reproduce the issue; in case there's a complex setup involved, please provide a testing content-package)
-5. the expected outcome
-6. the actual outcome
-
-You can use the following Markdown template:
-```markdown
-**Brackets version:** sprint 42  
-**AEM Brackets Extension:** 0.0.4  
-**OS and architecture:** Windows 8.1 x64  
-
-#### Steps to reproduce:
-1. use content package [my-content](http://www.example.com/my-content.zip)
-2. step 2
-3. step 3
-
-#### Expected outcome
-It works!
-
-#### Actual outcome
-It actually doesn't...
-```
-
 ## Development
 The AEM Brackets Extension is a Node.js module. The following steps need to be followed if you want to start hacking on new features:
 
