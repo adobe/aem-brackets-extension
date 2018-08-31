@@ -269,6 +269,12 @@
                 filter = filters[i];
                 if (remotePath !== '/' && remotePath.indexOf(filter.root) === 0 && remotePath.length > filter.root.length) {
                     // we're syncing something which is below a filter
+                    if (remotePath.endsWith('/.content.xml')) {
+                        remotePath = remotePath.substring(0, remotePath.length - 13);
+                    } else if (remotePath.endsWith('_cq_editConfig.xml')) {
+                        remotePath = remotePath.substring(0, remotePath.length - 4);
+                    }
+                    remotePath = remotePath.replace(/\/_cq_/g, '/cq:');
                     filterString += '<filter root="' + remotePath + '"/>';
                 } else {
                     // we're either syncing a full content package (remotePath is /) or something that matches a filter exactly
