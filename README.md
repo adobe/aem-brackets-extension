@@ -33,6 +33,10 @@ The AEM Brackets Extension is a Node.js module. The following steps need to be f
     grunt
     ```
 
-## Credits
-* [Nicolas Peltier](https://github.com/nicolasATadobe): Initial plug-in with HTL support (syntax highlighting and auto-completion for expressions and statements), and synchronisation to AEM (automatic and manual import and export).
-* [Radu Cotescu](https://github.com/raducotescu): Added project preferences, improved synchronisation to use the Package Manager HTTP Service API, added support for `filter.xml` rules, enhanced UI with sync notifications.
+## Contributing
+
+Contributions are welcomed! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+
+## Licensing
+
+This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
