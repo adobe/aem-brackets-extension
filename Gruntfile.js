@@ -123,7 +123,6 @@ module.exports = function (grunt) {
                             'node_modules/slice-stream/**',
                             'node_modules/sntp/**',
                             'node_modules/sshpk/**',
-                            'node_modules/sshpk/**',
                             'node_modules/string_decoder/**',
                             'node_modules/stringstream/**',
                             'node_modules/strip-ansi/**',
@@ -141,7 +140,10 @@ module.exports = function (grunt) {
                             'node_modules/xmldom/**',
                             'node_modules/xpath/**',
                             'node_modules/xtend/**',
-                            'node_modules/zip-stream/**'
+                            'node_modules/zip-stream/**',
+                            '!node_modules/**/*.md',
+                            '!node_modules/**/test.js',
+                            '!node_modules/**/test*/**/*',
                         ]
                     }
                 ]
