@@ -6,9 +6,9 @@
     "engines"        : {
         "brackets": ">=0.45.0"
     },
-    "author" : "Adobe Marketing Cloud (https://github.com/adobe-marketing-cloud)",
+    "author" : "Adobe (https://github.com/adobe)",
     "homepage" : "https://docs.adobe.com/content/docs/en/dev-tools/aem-brackets.html",
-    "repository" : "https://github.com/Adobe-Marketing-Cloud/aem-brackets-extension.git",
+    "repository" : "https://github.com/adobe/aem-brackets-extension.git",
     "license" : "Apache-2.0",
     "keywords": ["Adobe", "Adobe Experience Manager", "AEM", "Sightly", "sly", "HTL"],
     "categories": ["editing", "language", "external"],

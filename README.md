@@ -1,7 +1,7 @@
 # AEM Brackets Extension
-![](https://raw.githubusercontent.com/wiki/adobe-marketing-cloud/aem-brackets-extension/screenshots/brackets.png)
+![](https://raw.githubusercontent.com/wiki/adobe/aem-brackets-extension/screenshots/brackets.png)
 
-This extension provides a smooth workflow to edit AEM components and client libraries, and leverages the power of the [Brackets](http://brackets.io) code editor, which gives access from within the code editor to Photoshop files and layers. The easy synchronization provided by the AEM Brackets Extension (no Maven or File Vault required) increases developer efficiency and also helps front-end developers with limited AEM knowledge to participate on projects. This extension also provides some [HTL](https://github.com/Adobe-Marketing-Cloud/htl-spec) support, a template language that takes away the complexity of JSP to make component development easier and more secure.
+This extension provides a smooth workflow to edit AEM components and client libraries, and leverages the power of the [Brackets](http://brackets.io) code editor, which gives access from within the code editor to Photoshop files and layers. The easy synchronization provided by the AEM Brackets Extension (no Maven or File Vault required) increases developer efficiency and also helps front-end developers with limited AEM knowledge to participate on projects. This extension also provides some [HTL](https://github.com/adobe/htl-spec) support, a template language that takes away the complexity of JSP to make component development easier and more secure.
 
 ## Documentation
 Please refer to the [documentation page](http://docs.adobe.com/content/docs/en/dev-tools/aem-brackets.html) for instructions on how to install the extension, as well as detailed information about the features.
@@ -15,7 +15,7 @@ After these steps, you should be able to access the `/content/todo.html` URL on 
 * Embedded content packages are not supported.
 
 ## Reporting Bugs
-Please report any issues you encounter using GitHub's [issue tracker from](https://github.com/Adobe-Marketing-Cloud/aem-brackets-extension/issues).
+Please report any issues you encounter using GitHub's [issue tracker from](https://github.com/adobe/aem-brackets-extension/issues).
 
 ## Development
 The AEM Brackets Extension is a Node.js module. The following steps need to be followed if you want to start hacking on new features:
@@ -24,7 +24,7 @@ The AEM Brackets Extension is a Node.js module. The following steps need to be f
 2. clone this repository
     
     ```bash
-    git clone git@github.com:Adobe-Marketing-Cloud/aem-brackets-extension.git
+    git clone git@github.com:adobe/aem-brackets-extension.git
     ```
 3. in the `aem-brackets-extension` folder run
     
