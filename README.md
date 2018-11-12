@@ -35,7 +35,7 @@ The AEM Brackets Extension is a Node.js module. The following steps need to be f
 
 ## Contributing
 
-Contributions are welcomed! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
 
 ## Licensing
 
